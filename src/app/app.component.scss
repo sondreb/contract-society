@@ -1,0 +1,24 @@
+// Component-specific styles
+.sidenav-header {
+  background-color: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+  padding-bottom: 8px;
+}
+
+// Styles for the mobile footer
+.mobile-footer {
+  justify-content: space-around;
+  padding: 0;
+  height: 56px;
+}
+
+.mobile-nav-button {
+  padding: 4px;
+  line-height: 1;
+  font-size: 12px;
+}
+
+// Make sure theme toggle has proper spacing
+.theme-toggle {
+  margin-right: 8px;
+}
