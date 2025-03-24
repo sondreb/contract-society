@@ -119,6 +119,22 @@ a:hover {
   min-height: calc(100vh - 64px);
 }
 
+// Global card styles
+mat-card {
+  margin-bottom: 16px;
+  transition: box-shadow 0.3s ease;
+}
+
+mat-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+// Global form field styles
+mat-form-field {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
 // .theme-toggle {
 //   margin-left: 8px;
 // }

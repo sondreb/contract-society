@@ -6,7 +6,7 @@
 
   <div class="features-grid">
     @for (feature of features; track feature.title) {
-      <mat-card appearance="outlined" class="feature-card">
+      <mat-card class="feature-card">
         <mat-card-header>
           <mat-icon mat-card-avatar color="primary">{{ feature.icon }}</mat-icon>
           <mat-card-title>{{ feature.title }}</mat-card-title>
@@ -25,7 +25,7 @@
   </div>
 
   <div class="get-started-section">
-    <mat-card appearance="outlined">
+    <mat-card>
       <mat-card-header>
         <mat-card-title>Get Started</mat-card-title>
       </mat-card-header>
