@@ -14,25 +14,25 @@
   </div>
   
   <div class="content-container">
-    @for (item of steps; track $index) {
-      @if (currentStep() === $index) {
-        <div class="step-content" @slideInOut #step @staggerItems>
-          <div class="image-container animate-item" @fadeInOut>
-            <mat-icon class="step-icon">{{ item.icon }}</mat-icon>
-            <!-- Placeholder for image -->
-            <div class="placeholder-image">
-              <!-- You can replace this with an actual image -->
-              <mat-icon class="large-icon">{{ item.icon }}</mat-icon>
+    <div class="step-wrapper">
+      @for (item of steps; track $index) {
+        @if (currentStep() === $index) {
+          <div class="step-content" @slideInOut #step @staggerItems>
+            <div class="image-container animate-item" @fadeInOut>
+              <mat-icon class="step-icon">{{ item.icon }}</mat-icon>
+              <div class="placeholder-image">
+                <mat-icon class="large-icon">{{ item.icon }}</mat-icon>
+              </div>
+            </div>
+            
+            <div class="text-container">
+              <h1 class="animate-item">{{ item.title }}</h1>
+              <p class="animate-item">{{ item.content }}</p>
             </div>
           </div>
-          
-          <div class="text-container">
-            <h1 class="animate-item">{{ item.title }}</h1>
-            <p class="animate-item">{{ item.content }}</p>
-          </div>
-        </div>
+        }
       }
-    }
+    </div>
   </div>
   
   <div class="action-buttons">
