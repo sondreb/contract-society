@@ -1,0 +1,1 @@
+import{Gb as n,Hb as i,Wb as s,ib as o,yc as c}from"./chunk-7ZRUANDL.js";var p=class t{static \u0275fac=function(e){return new(e||t)};static \u0275cmp=o({type:t,selectors:[["app-societies"]],decls:2,vars:0,template:function(e,a){e&1&&(n(0,"p"),s(1,"Societies component works!"),i())},dependencies:[c],encapsulation:2})};export{p as SocietiesComponent};
