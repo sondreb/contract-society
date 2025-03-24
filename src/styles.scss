@@ -77,6 +77,15 @@ a:hover {
   margin-left: 16px;
 }
 
+.toolbar-title {
+  color: var(--mat-sys-on-background);
+  text-decoration: none;
+}
+
+.toolbar-title:hover {
+  text-decoration: none;
+}
+
 .main-content {
   flex: 1;
   padding: 16px;
