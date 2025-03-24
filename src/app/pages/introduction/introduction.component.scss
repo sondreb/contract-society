@@ -216,3 +216,32 @@
     font-size: 16px;
   }
 }
+
+@media (max-width: 480px) {
+  .step-content {
+    padding: 8px; // Reduce padding further on very small screens
+  }
+  
+  .image-container {
+    height: 180px; // Reduce the image container height
+  }
+  
+  .placeholder-image {
+    width: 140px;
+    height: 140px;
+  }
+  
+  .large-icon {
+    font-size: 70px;
+    height: 70px;
+    width: 70px;
+  }
+  
+  .text-container {
+    min-height: 100px; // Reduce minimum height
+  }
+  
+  .navigation-button {
+    min-width: 100px; // Slightly smaller buttons
+  }
+}

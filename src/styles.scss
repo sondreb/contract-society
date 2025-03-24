@@ -36,6 +36,16 @@ body {
   -moz-osx-font-smoothing: grayscale;
  }
 
+// Class to disable body scrolling when overlays are active
+body.overlay-active {
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: none;
+  height: 100%;
+  position: fixed;
+  width: 100%;
+}
+
  a {
   color: var(--mat-sys-primary);
   text-decoration: none;
@@ -252,4 +262,53 @@ mat-form-field {
 .fixed-height-container {
   position: relative;
   overflow: hidden;
+}
+
+// Responsive font sizing
+@media (max-width: 768px) {
+  html {
+    font-size: 14px; // Reduce base font size on smaller screens
+  }
+  
+  h1 {
+    font-size: 1.8rem !important;
+  }
+  
+  h2 {
+    font-size: 1.5rem !important;
+  }
+  
+  h3 {
+    font-size: 1.3rem !important;
+  }
+  
+  p {
+    font-size: 0.95rem !important;
+  }
+  
+  .mat-typography {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 13px; // Further reduce font size on very small screens
+  }
+  
+  h1 {
+    font-size: 1.6rem !important;
+  }
+  
+  h2 {
+    font-size: 1.4rem !important;
+  }
+  
+  h3 {
+    font-size: 1.2rem !important;
+  }
+  
+  p {
+    font-size: 0.9rem !important;
+  }
 }

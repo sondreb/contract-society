@@ -1,4 +1,4 @@
-import { Injectable, signal, computed, inject } from '@angular/core';
+import { Injectable, signal, computed, inject, effect } from '@angular/core';
 import { IntroductionService } from './introduction.service';
 
 /**
@@ -27,7 +27,30 @@ export class OverlayService {
     // Add other overlay conditions if they're added in the future
   });
 
-  constructor() {}
+  constructor() {
+    // Toggle body class when overlay state changes
+    effect(() => {
+      if (this.hasActiveOverlay()) {
+        this.disableScrolling();
+      } else {
+        this.enableScrolling();
+      }
+    });
+  }
+
+  /**
+   * Disable scrolling on the body when overlay is active
+   */
+  private disableScrolling(): void {
+    document.body.classList.add('overlay-active');
+  }
+
+  /**
+   * Enable scrolling on the body when no overlays are active
+   */
+  private enableScrolling(): void {
+    document.body.classList.remove('overlay-active');
+  }
 
   /**
    * Manually show the introduction overlay
