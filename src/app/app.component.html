@@ -1,3 +1,8 @@
+<!-- Introduction overlay displayed above everything else when needed -->
+@if (overlayService.showIntroduction()) {
+  <app-introduction />
+}
+
 <div class="app-container">
   <!-- Top Toolbar -->
   <mat-toolbar color="primary">

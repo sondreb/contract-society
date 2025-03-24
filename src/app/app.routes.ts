@@ -1,9 +1,39 @@
 import { Routes } from '@angular/router';
-import { SettingsComponent } from './pages/settings/settings.component';
-import { HomeComponent } from './pages/home/home.component';
 
 export const routes: Routes = [
-  { path: 'home', component: HomeComponent, title: 'Home' },
-  { path: 'settings', component: SettingsComponent, title: 'Settings' },
-  { path: '', redirectTo: '/home', pathMatch: 'full' }, // Redirect to home page as default
+  {
+    path: '',
+    loadComponent: () => 
+      import('./pages/home/home.component').then(m => m.HomeComponent)
+  },
+  {
+    path: 'settings',
+    loadComponent: () => 
+      import('./pages/settings/settings.component').then(m => m.SettingsComponent)
+  },
+  // We can keep this route for direct access if needed, but normal usage will show it as an overlay
+  {
+    path: 'introduction',
+    loadComponent: () => 
+      import('./pages/introduction/introduction.component').then(m => m.IntroductionComponent)
+  },
+  {
+    path: 'profile',
+    loadComponent: () => 
+      import('./pages/profile/profile.component').then(m => m.ProfileComponent)
+  },
+  {
+    path: 'societies',
+    loadComponent: () => 
+      import('./pages/societies/societies.component').then(m => m.SocietiesComponent)
+  },
+  {
+    path: 'scan',
+    loadComponent: () => 
+      import('./pages/scan/scan.component').then(m => m.ScanComponent)
+  },
+  { 
+    path: '**', 
+    redirectTo: '' 
+  }
 ];

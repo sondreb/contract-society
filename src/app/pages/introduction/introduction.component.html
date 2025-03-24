@@ -1,0 +1,85 @@
+<div class="introduction-container">
+  <div class="progress-container">
+    <mat-progress-bar mode="determinate" [value]="progressValue"></mat-progress-bar>
+    
+    <div class="step-indicators">
+      @for (step of steps; track $index) {
+        <div 
+          class="step-indicator" 
+          [class.active]="currentStep() === $index"
+          (click)="navigateToStep($index)">
+        </div>
+      }
+    </div>
+  </div>
+  
+  <div class="content-container">
+    @for (item of steps; track $index) {
+      @if (currentStep() === $index) {
+        <div class="step-content" @slideInOut #step>
+          <div class="image-container" @fadeInOut>
+            <mat-icon class="step-icon">{{ item.icon }}</mat-icon>
+            <!-- Placeholder for image -->
+            <div class="placeholder-image">
+              <!-- You can replace this with an actual image -->
+              <mat-icon class="large-icon">{{ item.icon }}</mat-icon>
+            </div>
+          </div>
+          
+          <div class="text-container" @fadeInOut>
+            <h1>{{ step.title }}</h1>
+            <p>{{ item.content }}</p>
+          </div>
+        </div>
+      }
+    }
+  </div>
+  
+  <div class="action-buttons">
+    <!-- Back button (hidden on first step) -->
+    @if (currentStep() > 0) {
+      <button 
+        mat-stroked-button 
+        color="primary" 
+        class="navigation-button"
+        (click)="previousStep()">
+        <mat-icon>arrow_back</mat-icon>
+        Back
+      </button>
+    }
+    
+    <!-- Skip button (only on non-last steps) -->
+    @if (currentStep() < totalSteps - 1) {
+      <button 
+        mat-button 
+        class="skip-button"
+        (click)="skipIntroduction()">
+        Skip
+      </button>
+    }
+    
+    <!-- Next button (on non-last steps) -->
+    @if (currentStep() < totalSteps - 1) {
+      <button 
+        mat-raised-button 
+        color="primary" 
+        class="navigation-button"
+        (click)="nextStep()">
+        Next
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    }
+    
+    <!-- Get Started button (only on last step) -->
+    @if (currentStep() === totalSteps - 1) {
+      <button 
+        mat-raised-button 
+        color="primary" 
+        class="navigation-button"
+        (click)="finishIntroduction()">
+        Get Started
+        <mat-icon>rocket_launch</mat-icon>
+      </button>
+    }
+  </div>
+</div>
