@@ -135,3 +135,13 @@ a:hover {
   flex: 1;
   min-width: 0;
 }
+
+// Settings page styles
+.settings-container h1 {
+  margin-bottom: 16px;
+  color: var(--mat-sys-primary);
+}
+
+.settings-card mat-card-header {
+  margin-bottom: 16px;
+}

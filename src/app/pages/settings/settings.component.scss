@@ -1,0 +1,23 @@
+.settings-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.settings-card {
+  margin-bottom: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.theme-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.divider {
+  margin: 16px 0;
+}
