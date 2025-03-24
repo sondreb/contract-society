@@ -13,6 +13,14 @@
     <span><a class="toolbar-title" [routerLink]="['/']">{{ title }}</a></span>
     <span class="toolbar-spacer"></span>
     
+    <!-- Update Button - only shown when updates are available -->
+    @if (updateService.updateAvailable()) {
+      <button mat-flat-button color="accent" class="update-button" (click)="applyUpdate()">
+        <mat-icon>system_update</mat-icon>
+        <span class="update-text">Update</span>
+      </button>
+    }
+    
     <!-- Theme Selector -->
     <button mat-icon-button [matMenuTriggerFor]="themeMenu" class="theme-toggle">
       <mat-icon>{{ isDarkTheme() ? 'dark_mode' : 'light_mode' }}</mat-icon>

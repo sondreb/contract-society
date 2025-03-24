@@ -12,6 +12,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ThemeService, ThemeMode } from './services/theme.service';
 import { IntroductionService } from './services/introduction.service';
 import { OverlayService } from './services/overlay.service';
+import { UpdateService } from './services/update.service';
 import { RouterModule } from '@angular/router';
 import { IntroductionComponent } from './pages/introduction/introduction.component';
 
@@ -47,6 +48,7 @@ export class AppComponent {
   private themeService = inject(ThemeService);
   private introductionService = inject(IntroductionService);
   overlayService = inject(OverlayService);
+  updateService = inject(UpdateService);
   private router = inject(Router);
   
   title = 'Contract Society';
@@ -96,5 +98,9 @@ export class AppComponent {
   showIntroduction(): void {
     this.closeSidenav();
     this.overlayService.openIntroduction();
+  }
+
+  applyUpdate(): void {
+    this.updateService.applyUpdate();
   }
 }
