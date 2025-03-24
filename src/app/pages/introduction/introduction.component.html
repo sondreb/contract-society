@@ -46,6 +46,9 @@
         <mat-icon>arrow_back</mat-icon>
         Back
       </button>
+    } @else {
+      <!-- Empty div to maintain flex layout when back button is hidden -->
+      <div></div>
     }
     
     <!-- Skip button (only on non-last steps) -->
@@ -61,7 +64,7 @@
     <!-- Next button (on non-last steps) -->
     @if (currentStep() < totalSteps - 1) {
       <button 
-        mat-raised-button 
+        mat-flat-button 
         color="primary" 
         class="navigation-button"
         (click)="nextStep()">
@@ -73,7 +76,7 @@
     <!-- Get Started button (only on last step) -->
     @if (currentStep() === totalSteps - 1) {
       <button 
-        mat-raised-button 
+        mat-flat-button 
         color="primary" 
         class="navigation-button"
         (click)="finishIntroduction()">
