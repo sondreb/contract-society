@@ -10,7 +10,9 @@ import {
   state,
   style,
   animate,
-  transition
+  transition,
+  query,
+  stagger
 } from '@angular/animations';
 
 @Component({
@@ -27,7 +29,7 @@ import {
   animations: [
     trigger('slideInOut', [
       state('void', style({
-        transform: 'translateX(100%)',
+        transform: 'translateX(50px)',
         opacity: 0
       })),
       state('*', style({
@@ -35,29 +37,43 @@ import {
         opacity: 1
       })),
       transition(':enter', [
-        animate('400ms ease-out')
+        animate('300ms cubic-bezier(0.4, 0.0, 0.2, 1)')
       ]),
       transition(':leave', [
-        animate('400ms ease-in', style({
-          transform: 'translateX(-100%)',
+        animate('250ms cubic-bezier(0.4, 0.0, 0.2, 1)', style({
+          transform: 'translateX(-50px)',
           opacity: 0
         }))
       ])
     ]),
     trigger('fadeInOut', [
       state('void', style({
-        opacity: 0
+        opacity: 0,
+        transform: 'scale(0.95)'
       })),
       state('*', style({
-        opacity: 1
+        opacity: 1,
+        transform: 'scale(1)'
       })),
       transition(':enter', [
-        animate('300ms ease-out')
+        animate('250ms 50ms cubic-bezier(0.4, 0.0, 0.2, 1)')
       ]),
       transition(':leave', [
-        animate('300ms ease-in', style({
-          opacity: 0
+        animate('200ms cubic-bezier(0.4, 0.0, 0.2, 1)', style({
+          opacity: 0,
+          transform: 'scale(0.95)'
         }))
+      ])
+    ]),
+    trigger('staggerItems', [
+      transition(':enter', [
+        query('.animate-item', [
+          style({ opacity: 0, transform: 'translateY(15px)' }),
+          stagger(100, [
+            animate('250ms cubic-bezier(0.4, 0.0, 0.2, 1)', 
+              style({ opacity: 1, transform: 'translateY(0)' }))
+          ])
+        ], { optional: true })
       ])
     ])
   ]

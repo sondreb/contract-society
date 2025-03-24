@@ -16,8 +16,8 @@
   <div class="content-container">
     @for (item of steps; track $index) {
       @if (currentStep() === $index) {
-        <div class="step-content" @slideInOut #step>
-          <div class="image-container" @fadeInOut>
+        <div class="step-content" @slideInOut #step @staggerItems>
+          <div class="image-container animate-item" @fadeInOut>
             <mat-icon class="step-icon">{{ item.icon }}</mat-icon>
             <!-- Placeholder for image -->
             <div class="placeholder-image">
@@ -26,9 +26,9 @@
             </div>
           </div>
           
-          <div class="text-container" @fadeInOut>
-            <h1>{{ step.title }}</h1>
-            <p>{{ item.content }}</p>
+          <div class="text-container">
+            <h1 class="animate-item">{{ item.title }}</h1>
+            <p class="animate-item">{{ item.content }}</p>
           </div>
         </div>
       }

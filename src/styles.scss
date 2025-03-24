@@ -233,3 +233,14 @@ mat-form-field {
   from { transform: translateY(20px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
 }
+
+// Ensure smooth animations throughout the app
+.animate-item {
+  backface-visibility: hidden; /* Prevent flickering */
+}
+
+// Optimize animations
+.optimize-animation {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}

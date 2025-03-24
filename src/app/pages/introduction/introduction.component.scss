@@ -59,6 +59,7 @@
   max-width: 600px;
   text-align: center;
   padding: 16px;
+  will-change: transform, opacity; /* Optimize for animations */
 }
 
 .image-container {
@@ -66,6 +67,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  will-change: transform, opacity; /* Optimize for animations */
 }
 
 .step-icon {
@@ -126,6 +128,10 @@
   position: absolute;
   right: 24px;
   top: 16px;
+}
+
+.animate-item {
+  will-change: transform, opacity;
 }
 
 @media (min-width: 768px) {
