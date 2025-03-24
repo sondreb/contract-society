@@ -97,17 +97,17 @@ export class IntroductionComponent {
   currentStep = this.introductionService.currentStep;
   totalSteps = this.introductionService.totalSteps;
   
-  // Steps data
+  // Steps data with improved text
   steps = [
     {
       title: 'Welcome to Contract Society',
-      content: 'A platform for creating and managing social contracts in a decentralized world.',
+      content: 'An app for creating and managing all kinds of contracts to help a society function.',
       image: 'assets/intro-welcome.svg',
       icon: 'handshake'
     },
     {
       title: 'Create Societies',
-      content: 'Form groups with shared values and goals. Define rules and agreements that work for everyone.',
+      content: 'Form societies with shared values and goals. Define rules and agreements that work for everyone.',
       image: 'assets/intro-societies.svg',
       icon: 'groups'
     },
