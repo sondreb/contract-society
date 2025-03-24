@@ -1,1 +1,0 @@
-import{Gb as n,Hb as i,Wb as p,ib as t,yc as r}from"./chunk-7ZRUANDL.js";var m=class o{static \u0275fac=function(e){return new(e||o)};static \u0275cmp=t({type:o,selectors:[["app-profile"]],decls:2,vars:0,template:function(e,s){e&1&&(n(0,"p"),p(1,"Profile component works!"),i())},dependencies:[r],encapsulation:2})};export{m as ProfileComponent};
