@@ -1,11 +1,12 @@
 {
-  "name": "app",
-  "version": "0.0.0",
+  "name": "contract-society",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
+    "deploy": "ng deploy --repo=https://github.com/sondreb/contract-society.git --cname=society.brainbox.no --name=SondreB --email=sondre@outlook.com",
     "test": "ng test"
   },
   "private": true,
