@@ -142,6 +142,29 @@ export class IntroductionComponent {
     this.handleSwipe();
   }
   
+  // Add keyboard navigation support
+  @HostListener('window:keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent): void {
+    switch(event.key) {
+      case 'ArrowRight':
+        this.nextStep();
+        break;
+      case 'ArrowLeft':
+        this.previousStep();
+        break;
+      case 'Escape':
+        this.skipIntroduction();
+        break;
+      case 'Enter':
+        if (this.currentStep() === this.totalSteps - 1) {
+          this.finishIntroduction();
+        } else {
+          this.nextStep();
+        }
+        break;
+    }
+  }
+  
   // Handle swipe gestures
   private handleSwipe(): void {
     const distance = this.touchEndX - this.touchStartX;

@@ -138,9 +138,38 @@
 .action-buttons {
   display: flex;
   justify-content: space-between;
-  padding: 24px;
-  background-color: var(--mat-sys-surface);
-  box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  padding: 16px;
+  box-sizing: border-box;
+  
+  // Make sure the button containers have consistent width
+  .button-placeholder {
+    width: 90px; // Match the width of navigation buttons
+  }
+  
+  .navigation-button {
+    min-width: 90px;
+    padding: 0 16px;
+    height: 44px; // Larger touch target for mobile
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    
+    // Add specific styling for each button type
+    &.back-button mat-icon {
+      margin-right: 4px;
+    }
+    
+    &.next-button mat-icon,
+    &.get-started-button mat-icon {
+      margin-left: 4px;
+    }
+  }
+  
+  .skip-button {
+    height: 44px; // Larger touch target for mobile
+  }
 }
 
 .navigation-button {
@@ -243,5 +272,18 @@
   
   .navigation-button {
     min-width: 100px; // Slightly smaller buttons
+  }
+  
+  .action-buttons {
+    padding: 12px 8px;
+    
+    .navigation-button {
+      min-width: 80px;
+      
+      // Ensure text and icons are visible
+      .button-text, mat-icon {
+        display: inline-block;
+      }
+    }
   }
 }

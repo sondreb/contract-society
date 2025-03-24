@@ -41,14 +41,14 @@
       <button 
         mat-stroked-button 
         color="primary" 
-        class="navigation-button"
+        class="navigation-button back-button"
         (click)="previousStep()">
         <mat-icon>arrow_back</mat-icon>
-        Back
+        <span class="button-text">Back</span>
       </button>
     } @else {
       <!-- Empty div to maintain flex layout when back button is hidden -->
-      <div></div>
+      <div class="button-placeholder"></div>
     }
     
     <!-- Skip button (only on non-last steps) -->
@@ -66,9 +66,9 @@
       <button 
         mat-flat-button 
         color="primary" 
-        class="navigation-button"
+        class="navigation-button next-button"
         (click)="nextStep()">
-        Next
+        <span class="button-text">Next</span>
         <mat-icon>arrow_forward</mat-icon>
       </button>
     }
@@ -78,9 +78,9 @@
       <button 
         mat-flat-button 
         color="primary" 
-        class="navigation-button"
+        class="navigation-button get-started-button"
         (click)="finishIntroduction()">
-        Get Started
+        <span class="button-text">Get Started</span>
         <mat-icon>rocket_launch</mat-icon>
       </button>
     }
