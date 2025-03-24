@@ -35,4 +35,10 @@ export class SettingsComponent {
   changeTheme(theme: ThemeMode): void {
     this.themeService.setTheme(theme);
   }
+
+  getSelectedThemeLabel(): string {
+    const currentTheme = this.selectedTheme();
+    const option = this.themeOptions.find(opt => opt.value === currentTheme);
+    return option ? option.label : '';
+  }
 }

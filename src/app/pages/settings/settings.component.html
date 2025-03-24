@@ -21,6 +21,12 @@
             </mat-option>
           }
         </mat-select>
+        <mat-select-trigger>
+          <div class="theme-option">
+            <mat-icon>{{ selectedTheme() === 'auto' ? 'auto_mode' : selectedTheme() === 'light' ? 'light_mode' : 'dark_mode' }}</mat-icon>
+            <span>{{ getSelectedThemeLabel() }}</span>
+          </div>
+        </mat-select-trigger>
       </mat-form-field>
     </mat-card-content>
   </mat-card>
