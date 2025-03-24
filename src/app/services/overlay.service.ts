@@ -11,9 +11,12 @@ import { IntroductionService } from './introduction.service';
 export class OverlayService {
   private introService = inject(IntroductionService);
   
+  // Signal to track if introduction is manually shown
+  private manuallyShowIntroduction = signal<boolean>(false);
+  
   // Computed signal for whether the introduction should be shown
   public showIntroduction = computed(() => {
-    return !this.introService.introductionCompleted();
+    return !this.introService.introductionCompleted() || this.manuallyShowIntroduction();
   });
   
   // Additional overlay signals can be added here as needed
@@ -25,4 +28,20 @@ export class OverlayService {
   });
 
   constructor() {}
+
+  /**
+   * Manually show the introduction overlay
+   */
+  public openIntroduction(): void {
+    this.introService.reopenIntroduction();
+    this.manuallyShowIntroduction.set(true);
+  }
+
+  /**
+   * Hide the introduction overlay 
+   * (called when the user completes or skips the introduction)
+   */
+  public closeIntroduction(): void {
+    this.manuallyShowIntroduction.set(false);
+  }
 }

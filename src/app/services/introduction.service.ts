@@ -70,4 +70,13 @@ export class IntroductionService {
       this.currentStep.set(step);
     }
   }
+  
+  /**
+   * Prepare for showing the introduction again
+   * Resets to the first step without marking as incomplete
+   */
+  public reopenIntroduction(): void {
+    // Just reset to the first step without changing completion status
+    this.currentStep.set(0);
+  }
 }

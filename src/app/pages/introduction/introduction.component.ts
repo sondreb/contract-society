@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { Router } from '@angular/router';
 import { IntroductionService } from '../../services/introduction.service';
+import { OverlayService } from '../../services/overlay.service';
 import { 
   trigger,
   state,
@@ -80,6 +81,7 @@ import {
 })
 export class IntroductionComponent {
   private introductionService = inject(IntroductionService);
+  private overlayService = inject(OverlayService);
   private router = inject(Router);
   
   @ViewChildren('step') stepElements!: QueryList<ElementRef>;
@@ -165,12 +167,18 @@ export class IntroductionComponent {
   }
   
   skipIntroduction(): void {
-    this.introductionService.completeIntroduction();
+    this.overlayService.closeIntroduction();
+    if (!this.introductionService.introductionCompleted()) {
+      this.introductionService.completeIntroduction();
+    }
     this.router.navigate(['/']);
   }
   
   finishIntroduction(): void {
-    this.introductionService.completeIntroduction();
+    this.overlayService.closeIntroduction();
+    if (!this.introductionService.introductionCompleted()) {
+      this.introductionService.completeIntroduction();
+    }
     this.router.navigate(['/']);
   }
   

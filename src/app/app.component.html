@@ -45,10 +45,17 @@
         </div>
         
         @for (item of navItems; track item.label) {
-          <a mat-list-item [routerLink]="item.route" (click)="closeSidenav()">
-            <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-            <span style="margin-left: 8px;">{{ item.label }}</span>
-          </a>
+          @if (item.route) {
+            <a mat-list-item [routerLink]="item.route" (click)="closeSidenav()">
+              <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+              <span style="margin-left: 8px;">{{ item.label }}</span>
+            </a>
+          } @else if (item.action) {
+            <a mat-list-item (click)="item.action()">
+              <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+              <span style="margin-left: 8px;">{{ item.label }}</span>
+            </a>
+          }
         }
       </mat-nav-list>
     </mat-sidenav>

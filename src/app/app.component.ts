@@ -56,11 +56,16 @@ export class AppComponent {
     { label: 'Profile', icon: 'person', route: '/profile' },
     { label: 'Societies', icon: 'groups', route: '/societies' },
     { label: 'Scan', icon: 'qr_code_scanner', route: '/scan' },
-    { label: 'Settings', icon: 'settings', route: '/settings' }
+    { label: 'Settings', icon: 'settings', route: '/settings' },
+    { 
+      label: 'Introduction', 
+      icon: 'help_outline', 
+      action: () => this.showIntroduction() 
+    }
   ];
 
-  // For the bottom mobile navigation
-  mobileNavItems: NavItem[] = this.navItems;
+  // For the bottom mobile navigation - only include items with routes
+  mobileNavItems: NavItem[] = this.navItems.filter(item => !!item.route);
 
   themeOptions = this.themeService.getThemeOptions();
   isDarkTheme = this.themeService.isDarkTheme;
@@ -86,5 +91,10 @@ export class AppComponent {
 
   changeTheme(theme: ThemeMode) {
     this.themeService.setTheme(theme);
+  }
+
+  showIntroduction(): void {
+    this.closeSidenav();
+    this.overlayService.openIntroduction();
   }
 }
