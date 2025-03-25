@@ -82,8 +82,8 @@
           </div>
         </mat-card-content>
         
-        <mat-card-actions>
-          <button mat-raised-button color="primary" (click)="startJoining()" [disabled]="joiningActive()">
+        <mat-card-actions class="centered-card-actions actions-padding">
+          <button mat-flat-button color="primary" (click)="startJoining()" [disabled]="joiningActive()">
             JOIN SOCIETY
           </button>
         </mat-card-actions>
@@ -106,7 +106,7 @@
               <mat-icon color="primary" class="success-icon">check_circle</mat-icon>
               <h3>Congratulations!</h3>
               <p>You have successfully joined {{ society()?.name }}.</p>
-              <button mat-raised-button color="primary" (click)="cancelJoining()">CONTINUE</button>
+              <button mat-flat-button color="primary" (click)="cancelJoining()">CONTINUE</button>
             </div>
           } @else {
             <mat-horizontal-stepper [linear]="true" [selectedIndex]="currentStep()">
@@ -141,7 +141,7 @@
                   <div class="step-actions">
                     <button mat-button (click)="cancelJoining()">CANCEL</button>
                     <button 
-                      mat-raised-button 
+                      mat-flat-button 
                       color="primary" 
                       [disabled]="!canProceedToVerification()"
                       (click)="proceedToVerification()"
@@ -187,7 +187,7 @@
                   <div class="step-actions">
                     <button mat-button (click)="currentStep.set(0)" [disabled]="processingVerification()">BACK</button>
                     <button 
-                      mat-raised-button 
+                      mat-flat-button 
                       color="primary" 
                       (click)="completeVerification()"
                       [disabled]="processingVerification()"
