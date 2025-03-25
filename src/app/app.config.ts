@@ -6,6 +6,7 @@ import { MAT_CARD_CONFIG } from '@angular/material/card';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideServiceWorker } from '@angular/service-worker';
+import { DateAdapterModule } from './modules/date-adapter.module';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,9 +14,11 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     importProvidersFrom(BrowserAnimationsModule),
     { provide: MAT_CARD_CONFIG, useValue: { appearance: 'outlined' } },
-    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline' } }, provideServiceWorker('ngsw-worker.js', {
-            enabled: !isDevMode(),
-            registrationStrategy: 'registerWhenStable:30000'
-          })
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline' } },
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
+    importProvidersFrom(DateAdapterModule)
   ]
 };

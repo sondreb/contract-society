@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,21 +22,34 @@ export class HomeComponent {
   features = [
     {
       title: 'Manage Societies',
-      description: 'Create and manage multiple societies with custom rules.',
+      description: 'Create and govern multiple societies with customizable rules and transparent decision-making processes.',
       icon: 'groups',
       route: '/societies'
     },
     {
-      title: 'QR Code Scanner',
-      description: 'Scan QR codes to quickly interact with other members.',
-      icon: 'qr_code_scanner',
-      route: '/scan'
+      title: 'Digital Identities',
+      description: 'Build your digital presence with verifiable credentials that establish trust across your social networks.',
+      icon: 'fingerprint',
+      route: '/profile'
     },
     {
-      title: 'Profile Management',
-      description: 'Set up your profile and manage your personal information.',
-      icon: 'person',
-      route: '/profile'
+      title: 'Smart Agreements',
+      description: 'Define clear terms and conditions that automatically execute when conditions are met.',
+      icon: 'handshake',
+      route: '/agreements'
+    },
+    {
+      title: 'Secure Voting',
+      description: 'Participate in fair, transparent decision-making processes within your societies.',
+      icon: 'how_to_vote',
+      route: '/societies'
     }
+  ];
+
+  benefits = [
+    'Transparent governance for communities and organizations',
+    'Simplified conflict resolution with clear agreements',
+    'Build reputation across multiple social contexts',
+    'Secure and private identity management'
   ];
 }

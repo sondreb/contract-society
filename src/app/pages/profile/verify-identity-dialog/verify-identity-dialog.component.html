@@ -59,15 +59,147 @@
         } @else if (serviceId === 'free-id') {
           <div class="verification-instructions">
             <h3>Verification with FreeID</h3>
-            <p>Please follow these steps to verify your identity:</p>
-            <ol>
-              <li>Open your FreeID wallet</li>
-              <li>Navigate to "Verify Identity"</li>
-              <li>Enter the following code: <strong>FR-1284-9753</strong></li>
-              <li>Submit your verification</li>
-            </ol>
-            
-            <div class="verification-code">FR-1284-9753</div>
+
+            @if (submissionSuccess()) {
+              <div class="success-message">
+                <mat-icon color="primary">check_circle</mat-icon>
+                <p>Your FreeID application has been successfully processed!</p>
+                <p>A verification specialist will review your application and you will receive a notification when your identity is verified.</p>
+              </div>
+            } @else {
+              <p>To verify your identity with FreeID, please complete the application form below:</p>
+
+              <form [formGroup]="freeIdForm" class="freeid-form">
+                <div class="form-field">
+                  <mat-form-field appearance="outline">
+                    <mat-label>FreeID Name</mat-label>
+                    <input 
+                      matInput 
+                      formControlName="name"
+                      placeholder="Enter your chosen name for FreeID identity">
+                    <mat-error *ngIf="freeIdForm.get('name')?.hasError('required')">
+                      Name is required
+                    </mat-error>
+                    <mat-error *ngIf="freeIdForm.get('name')?.hasError('minlength')">
+                      Name must be at least 2 characters long
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                
+                <div class="form-field">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Sex</mat-label>
+                    <mat-select formControlName="sex">
+                      <mat-option value="Male">Male</mat-option>
+                      <mat-option value="Female">Female</mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="freeIdForm.get('sex')?.hasError('required')">
+                      Sex is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                
+                <div class="form-field">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Date of Birth</mat-label>
+                    <input 
+                      matInput 
+                      [matDatepicker]="picker" 
+                      formControlName="dateOfBirth"
+                      placeholder="MM/DD/YYYY">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                    @if (freeIdForm.get('dateOfBirth')?.hasError('required') && freeIdForm.get('dateOfBirth')?.touched) {
+                      <mat-error>Date of birth is required</mat-error>
+                    }
+                  </mat-form-field>
+                </div>
+                
+                <div class="form-field">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Place of Birth</mat-label>
+                    <input 
+                      matInput 
+                      formControlName="placeOfBirth"
+                      placeholder="City, Country">
+                    <mat-error *ngIf="freeIdForm.get('placeOfBirth')?.hasError('required')">
+                      Place of birth is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                
+                <div class="form-field photo-upload">
+                  <label class="photo-label">Photograph (Passport-style)</label>
+                  <div class="photo-upload-container">
+                    <button 
+                      type="button" 
+                      mat-stroked-button 
+                      color="primary" 
+                      (click)="photoInput.click()"
+                      class="upload-button">
+                      <mat-icon>add_a_photo</mat-icon>
+                      Upload Photo
+                    </button>
+                    <input 
+                      #photoInput
+                      type="file"
+                      accept="image/*"
+                      style="display: none"
+                      (change)="onPhotoSelected($event)">
+                    <p class="photo-requirements">
+                      Clear face, neutral background, high resolution
+                    </p>
+                  </div>
+
+                  @if (photoPreviewUrl()) {
+                    <div class="photo-preview">
+                      <img [src]="photoPreviewUrl()" alt="Uploaded photo preview">
+                    </div>
+                  }
+                </div>
+                
+                <div class="form-field covenant-acceptance">
+                  <mat-checkbox formControlName="covenantAccepted">
+                    I have read and accept <a href="https://www.worldvoluntaryist.org/voluntaryist-covenant" target="_blank" rel="noopener">The Voluntaryist Covenant</a>
+                  </mat-checkbox>
+                  @if (freeIdForm.get('covenantAccepted')?.hasError('required') && freeIdForm.get('covenantAccepted')?.touched) {
+                    <mat-error>You must accept the covenant to proceed</mat-error>
+                  }
+                </div>
+
+                @if (submissionError()) {
+                  <div class="error-message">
+                    <mat-icon color="warn">error</mat-icon>
+                    <p>{{ submissionError() }}</p>
+                  </div>
+                }
+
+                <div class="submission-options">
+                  <h4>Choose submission method:</h4>
+                  <div class="submission-buttons">
+                    <button 
+                      type="button" 
+                      mat-stroked-button 
+                      color="primary"
+                      [disabled]="freeIdForm.invalid || verifying()"
+                      (click)="downloadAsJson()">
+                      <mat-icon>save_alt</mat-icon>
+                      Save as JSON File
+                    </button>
+                    
+                    <button 
+                      type="button" 
+                      mat-flat-button 
+                      color="primary"
+                      [disabled]="freeIdForm.invalid || verifying()"
+                      (click)="submitToApi()">
+                      <mat-icon>cloud_upload</mat-icon>
+                      Submit to FreeID
+                    </button>
+                  </div>
+                </div>
+              </form>
+            }
           </div>
         }
       }
@@ -86,18 +218,24 @@
       CONTINUE
     </button>
   } @else if (verificationStep() === 2) {
-    <button mat-button type="button" (click)="previousStep()" [disabled]="verifying()">BACK</button>
-    <button 
-      mat-flat-button 
-      color="primary"
-      (click)="verify()"
-      [disabled]="verifying()">
-      @if (verifying()) {
-        <span>VERIFYING...</span>
-      } @else {
-        <span>COMPLETE VERIFICATION</span>
-      }
-    </button>
+    @if (verificationForm.get('serviceId')?.value === 'mtl-id') {
+      <button mat-button type="button" (click)="previousStep()" [disabled]="verifying()">BACK</button>
+      <button 
+        mat-flat-button 
+        color="primary"
+        (click)="verify()"
+        [disabled]="verifying()">
+        @if (verifying()) {
+          <span>VERIFYING...</span>
+        } @else {
+          <span>COMPLETE VERIFICATION</span>
+        }
+      </button>
+    } @else if (!submissionSuccess()) {
+      <button mat-button type="button" (click)="previousStep()" [disabled]="verifying()">BACK</button>
+    } @else {
+      <button mat-button type="button" (click)="close()">CLOSE</button>
+    }
   }
 </mat-dialog-actions>
 
