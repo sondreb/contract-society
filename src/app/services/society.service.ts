@@ -102,7 +102,7 @@ export class SocietyService {
 
   // Joining process status
   private joiningProcessActiveSignal = signal<boolean>(false);
-  private selectedVerificationMethodSignal = signal<string | null>(null);
+  private selectedIdentityIdSignal = signal<string | null>(null);
 
   constructor() {}
 
@@ -134,18 +134,18 @@ export class SocietyService {
   // Start joining process
   startJoiningProcess() {
     this.joiningProcessActiveSignal.set(true);
-    this.selectedVerificationMethodSignal.set(null);
+    this.selectedIdentityIdSignal.set(null);
   }
 
   // Cancel joining process
   cancelJoiningProcess() {
     this.joiningProcessActiveSignal.set(false);
-    this.selectedVerificationMethodSignal.set(null);
+    this.selectedIdentityIdSignal.set(null);
   }
 
-  // Select verification method
-  selectVerificationMethod(methodId: string) {
-    this.selectedVerificationMethodSignal.set(methodId);
+  // Select identity for joining
+  selectIdentity(identityId: string) {
+    this.selectedIdentityIdSignal.set(identityId);
   }
 
   // Get joining process state
@@ -153,19 +153,19 @@ export class SocietyService {
     return this.joiningProcessActiveSignal;
   }
 
-  // Get selected verification method
-  getSelectedVerificationMethod() {
-    return this.selectedVerificationMethodSignal;
+  // Get selected identity
+  getSelectedIdentity() {
+    return this.selectedIdentityIdSignal;
   }
 
-  // Complete joining process (would handle actual joining logic in a real app)
+  // Complete joining process with selected identity
   async completeJoiningProcess(): Promise<boolean> {
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1500));
     
-    // In a real app, this would handle the actual verification and joining
+    // In a real app, this would handle the actual joining with the selected identity
     this.joiningProcessActiveSignal.set(false);
-    this.selectedVerificationMethodSignal.set(null);
+    this.selectedIdentityIdSignal.set(null);
     
     return true;
   }

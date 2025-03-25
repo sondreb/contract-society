@@ -110,41 +110,60 @@
             </div>
           } @else {
             <mat-horizontal-stepper [linear]="true" [selectedIndex]="currentStep()">
-              <!-- Step 1: Choose Verification Method -->
-              <mat-step label="Choose Verification Method">
+              <!-- Step 1: Choose Identity -->
+              <mat-step label="Select Identity">
                 <div class="step-content">
-                  <p>To join this society, you need to verify your identity. Please choose a verification method:</p>
-                  
-                  <div class="verification-options">
-                    @for (option of verificationOptions(); track option.id) {
-                      <div 
-                        class="verification-option" 
-                        [class.selected]="selectedVerificationMethod() === option.id"
-                        (click)="selectVerificationMethod(option.id)"
-                      >
-                        <mat-icon>{{ option.icon }}</mat-icon>
-                        <div class="option-content">
-                          <h3>{{ option.name }}</h3>
-                          <p>{{ option.description }}</p>
+                  @if (!hasVerifiedIdentities()) {
+                    <div class="no-identities-message">
+                      <mat-icon color="warning">info</mat-icon>
+                      <p>You don't have any verified identities yet.</p>
+                      <p>You need at least one verified identity to join this society.</p>
+                      <button mat-raised-button color="primary" (click)="navigateToProfile()">
+                        ADD IDENTITY IN PROFILE
+                      </button>
+                    </div>
+                  } @else {
+                    <p>To join this society, please select one of your verified identities:</p>
+                    
+                    <div class="verification-options">
+                      @for (identity of verifiedIdentities(); track identity.id) {
+                        <div 
+                          class="verification-option" 
+                          [class.selected]="selectedIdentityId() === identity.id"
+                          (click)="selectIdentity(identity.id)"
+                        >
+                          <mat-icon>{{ getIdentityIcon(identity.type) }}</mat-icon>
+                          <div class="option-content">
+                            <h3>{{ getIdentityName(identity) }}</h3>
+                            <p class="identity-value">{{ identity.value }}</p>
+                            <p class="verified-on">Verified on {{ formatDate(identity.lastVerified) }}</p>
+                          </div>
+                          <div class="selection-indicator">
+                            @if (selectedIdentityId() === identity.id) {
+                              <mat-icon color="primary">check_circle</mat-icon>
+                            } @else {
+                              <div class="unselected-circle"></div>
+                            }
+                          </div>
                         </div>
-                        <div class="selection-indicator">
-                          @if (selectedVerificationMethod() === option.id) {
-                            <mat-icon color="primary">check_circle</mat-icon>
-                          } @else {
-                            <div class="unselected-circle"></div>
-                          }
-                        </div>
-                      </div>
-                    }
-                  </div>
+                      }
+                    </div>
+                    
+                    <div class="identity-actions">
+                      <a mat-button color="primary" (click)="navigateToProfile()">
+                        <mat-icon>person</mat-icon> 
+                        Manage Identities in Profile
+                      </a>
+                    </div>
+                  }
                   
                   <div class="step-actions">
                     <button mat-button (click)="cancelJoining()">CANCEL</button>
                     <button 
                       mat-flat-button 
                       color="primary" 
-                      [disabled]="!canProceedToVerification()"
-                      (click)="proceedToVerification()"
+                      [disabled]="!canProceedWithJoining()"
+                      (click)="proceedToConfirmation()"
                     >
                       CONTINUE
                     </button>
@@ -152,50 +171,50 @@
                 </div>
               </mat-step>
               
-              <!-- Step 2: Complete Verification -->
-              <mat-step label="Verify Identity">
+              <!-- Step 2: Confirm Joining -->
+              <mat-step label="Confirm">
                 <div class="step-content">
-                  <h3>Verify Your Identity</h3>
+                  <h3>Confirm Society Membership</h3>
                   
-                  @if (selectedVerificationMethod() === 'mtl-id') {
-                    <div class="verification-instructions">
-                      <p>You've selected MTL ID verification. Please follow these steps:</p>
-                      <ol>
-                        <li>Open your MTL ID app</li>
-                        <li>Scan the QR code below</li>
-                        <li>Approve the verification request</li>
-                      </ol>
-                      
-                      <div class="qr-code-container">
-                        <img src="assets/mock-qr-code.png" alt="Verification QR Code" class="qr-code">
-                      </div>
+                  <div class="confirmation-content">
+                    <p>You are about to join <strong>{{ society()?.name }}</strong> using the following identity:</p>
+                    
+                    @for (identity of verifiedIdentities(); track identity.id) {
+                      @if (identity.id === selectedIdentityId()) {
+                        <div class="selected-identity-summary">
+                          <mat-icon>{{ getIdentityIcon(identity.type) }}</mat-icon>
+                          <div>
+                            <h4>{{ getIdentityName(identity) }}</h4>
+                            <p class="identity-type">{{ identity.type }}</p>
+                            <p class="identity-id">{{ identity.value }}</p>
+                          </div>
+                        </div>
+                      }
+                    }
+                    
+                    <div class="membership-terms">
+                      <h4>Membership Terms</h4>
+                      <p>By joining this society, you agree to:</p>
+                      <ul>
+                        <li>Abide by the society's rules and principles</li>
+                        <li>Participate in governance when required</li>
+                        <li>Fulfill any obligations as outlined in their charter</li>
+                      </ul>
                     </div>
-                  } @else if (selectedVerificationMethod() === 'free-id') {
-                    <div class="verification-instructions">
-                      <p>You've selected FreeID verification. Please follow these steps:</p>
-                      <ol>
-                        <li>Open your FreeID wallet</li>
-                        <li>Select "Verify Identity"</li>
-                        <li>Enter this code: <strong>FR-1284-9753</strong></li>
-                        <li>Submit your verification</li>
-                      </ol>
-                      
-                      <div class="verification-code">FR-1284-9753</div>
-                    </div>
-                  }
+                  </div>
                   
                   <div class="step-actions">
                     <button mat-button (click)="currentStep.set(0)" [disabled]="processingVerification()">BACK</button>
                     <button 
                       mat-flat-button 
                       color="primary" 
-                      (click)="completeVerification()"
+                      (click)="completeJoining()"
                       [disabled]="processingVerification()"
                     >
                       @if (processingVerification()) {
                         <span>PROCESSING...</span>
                       } @else {
-                        <span>COMPLETE VERIFICATION</span>
+                        <span>JOIN SOCIETY</span>
                       }
                     </button>
                   </div>

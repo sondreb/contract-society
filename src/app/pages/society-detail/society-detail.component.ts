@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, effect, computed } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -11,7 +11,9 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SocietyService } from '../../services/society.service';
-import { Society, IdentityVerificationOption } from '../../models/society.model';
+import { IdentityService } from '../../services/identity.service';
+import { Society } from '../../models/society.model';
+import { Identity } from '../../models/identity.model';
 
 @Component({
   selector: 'app-society-detail',
@@ -37,16 +39,19 @@ export class SocietyDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private societyService = inject(SocietyService);
+  private identityService = inject(IdentityService);
   private dialog = inject(MatDialog);
   
   society = signal<Society | null>(null);
   loading = signal(true);
   error = signal<string | null>(null);
   
+  // Get verified identities from the identity service
+  verifiedIdentities = this.identityService.getVerifiedIdentities;
+  
   // Joining process
   joiningActive = this.societyService.getJoiningProcessActive();
-  verificationOptions = this.societyService.getVerificationOptions();
-  selectedVerificationMethod = this.societyService.getSelectedVerificationMethod();
+  selectedIdentityId = this.societyService.getSelectedIdentity();
   
   // Processing state
   processingVerification = signal(false);
@@ -55,9 +60,14 @@ export class SocietyDetailComponent implements OnInit {
   // Current step in joining process
   currentStep = signal(0);
   
-  // Computed value for whether user can proceed to verification
-  canProceedToVerification = computed(() => {
-    return this.selectedVerificationMethod() !== null;
+  // Computed value for whether user can proceed with joining
+  canProceedWithJoining = computed(() => {
+    return this.selectedIdentityId() !== null;
+  });
+
+  // Computed value for whether user has any verified identities
+  hasVerifiedIdentities = computed(() => {
+    return this.verifiedIdentities().length > 0;
   });
   
   constructor() {
@@ -93,17 +103,17 @@ export class SocietyDetailComponent implements OnInit {
     this.societyService.cancelJoiningProcess();
   }
   
-  selectVerificationMethod(methodId: string): void {
-    this.societyService.selectVerificationMethod(methodId);
+  selectIdentity(identityId: string): void {
+    this.societyService.selectIdentity(identityId);
   }
   
-  proceedToVerification(): void {
-    if (this.selectedVerificationMethod()) {
+  proceedToConfirmation(): void {
+    if (this.selectedIdentityId()) {
       this.currentStep.set(1);
     }
   }
   
-  async completeVerification(): Promise<void> {
+  async completeJoining(): Promise<void> {
     this.processingVerification.set(true);
     
     try {
@@ -112,10 +122,16 @@ export class SocietyDetailComponent implements OnInit {
         this.joinSuccess.set(true);
       }
     } catch (error) {
-      console.error('Verification failed:', error);
+      console.error('Joining failed:', error);
     } finally {
       this.processingVerification.set(false);
     }
+  }
+  
+  navigateToProfile(): void {
+    // Close the dialog and navigate to profile page
+    this.cancelJoining();
+    this.router.navigate(['/profile']);
   }
   
   returnToSocieties(): void {
@@ -125,5 +141,24 @@ export class SocietyDetailComponent implements OnInit {
   formatDate(date: Date | undefined): string {
     if (!date) return 'Unknown';
     return new Date(date).toLocaleDateString();
+  }
+  
+  // Helper to get an identity icon based on type
+  getIdentityIcon(type: string): string {
+    switch (type) {
+      case 'did:stellar':
+        return 'stars';
+      case 'did:is': 
+        return 'security';
+      case 'did:key':
+        return 'key';
+      default:
+        return 'account_circle';
+    }
+  }
+  
+  // Helper to get a formatted name for the identity
+  getIdentityName(identity: Identity): string {
+    return identity.label || identity.type;
   }
 }
