@@ -195,9 +195,16 @@
                       style="display: none"
                       (change)="onPhotoSelected($event)">
                     <p class="photo-requirements">
-                      Clear face, neutral background, high resolution
+                      Clear face, neutral background, high resolution (max {{ maxPhotoSizeMB }}MB)
                     </p>
                   </div>
+
+                  @if (photoError()) {
+                    <div class="photo-error">
+                      <mat-icon color="warn">error</mat-icon>
+                      <span>{{ photoError() }}</span>
+                    </div>
+                  }
 
                   @if (photoPreviewUrl()) {
                     <div class="photo-preview">

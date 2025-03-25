@@ -92,6 +92,8 @@ export class VerifyIdentityDialogComponent {
   submissionSuccess = signal(false);
   applicationId = signal<string>(''); // Add signal to store the application ID
   isRetrying = signal(false); // Add signal to track if we're retrying a failed submission
+  photoError = signal<string | null>(null); // Add signal for photo error message
+  maxPhotoSizeMB = 5; // Maximum photo size in MB
 
   close(): void {
     this.dialogRef.close();
@@ -144,6 +146,17 @@ export class VerifyIdentityDialogComponent {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
+      
+      // Validate file size (5MB max)
+      const maxSizeBytes = this.maxPhotoSizeMB * 1024 * 1024;
+      if (file.size > maxSizeBytes) {
+        this.photoError.set(`Photo is too large. Maximum size is ${this.maxPhotoSizeMB}MB.`);
+        this.photoPreviewUrl.set(''); // Clear any previous preview
+        input.value = ''; // Reset the input
+        return;
+      }
+      
+      this.photoError.set(null); // Clear previous error
       
       // Preview the selected photo
       const reader = new FileReader();

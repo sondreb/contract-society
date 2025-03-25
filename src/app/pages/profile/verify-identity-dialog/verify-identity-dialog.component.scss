@@ -257,6 +257,21 @@ mat-dialog-content {
     }
   }
   
+  .photo-error {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+    color: #f44336;
+    font-size: 0.9rem;
+    
+    mat-icon {
+      margin-right: 8px;
+      font-size: 18px;
+      height: 18px;
+      width: 18px;
+    }
+  }
+  
   .photo-preview {
     margin-top: 16px;
     display: flex;
