@@ -53,14 +53,28 @@
 }
 
 .identity-item {
-  background-color: #f8f8f8;
+  background-color: rgba(0, 0, 0, 0.03);
   border-radius: 8px;
   padding: 16px;
   margin-bottom: 16px;
-  border-left: 4px solid #ccc;
+  border-left: 4px solid var(--mat-divider-color);
   
   &.verified {
-    border-left-color: #4caf50;
+    border-left-color: var(--mat-success-color);
+  }
+  
+  // Apply specific styles for dark theme
+  @media (prefers-color-scheme: dark) {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  
+  .mat-mdc-card & {
+    // For items inside mat-card which might have its own theming
+    background-color: rgba(0, 0, 0, 0.03);
+    
+    @media (prefers-color-scheme: dark) {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
   }
 }
 
@@ -81,7 +95,7 @@
 
 .identity-type {
   font-size: 0.9rem;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--mat-card-subtitle-text-color);
 }
 
 .identity-value {
@@ -90,6 +104,10 @@
   padding: 8px;
   border-radius: 4px;
   overflow-x: auto;
+  
+  @media (prefers-color-scheme: dark) {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
   
   code {
     font-family: monospace;
@@ -107,7 +125,7 @@
 }
 
 .verification-label {
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--mat-card-subtitle-text-color);
 }
 
 .verification-service {
@@ -118,6 +136,10 @@
   padding: 4px 8px;
   border-radius: 16px;
   
+  @media (prefers-color-scheme: dark) {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+  
   mat-icon {
     font-size: 16px;
     width: 16px;
@@ -127,7 +149,7 @@
 
 .verification-date {
   margin-left: auto;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--mat-card-subtitle-text-color);
 }
 
 .identity-actions {
@@ -154,11 +176,11 @@
   }
   
   p {
-    color: rgba(0, 0, 0, 0.6);
+    color: var(--mat-card-subtitle-text-color);
     max-width: 300px;
   }
 }
 
 .verified-icon {
-  color: green !important;
+  color: var(--mat-success-color) !important;
 }

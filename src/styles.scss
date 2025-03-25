@@ -10,6 +10,11 @@ html {
     typography: Roboto,
     density: 0,
   ));
+  
+  // Add CSS custom properties for success colors
+  --mat-success-color: #4caf50;
+  --mat-success-lighter: #c8e6c9;
+  --mat-success-darker: #2e7d32;
 }
 
 .dark-theme {
@@ -23,6 +28,11 @@ html {
     background-color: #424242;
     color: #bdbdbd;
   }
+  
+  // Add CSS custom properties for success colors in dark mode
+  --mat-success-color: #66bb6a;
+  --mat-success-lighter: #a5d6a7;
+  --mat-success-darker: #388e3c;
 }
 
 html, body {
