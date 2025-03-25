@@ -64,7 +64,36 @@
               <div class="success-message">
                 <mat-icon color="primary">check_circle</mat-icon>
                 <p>Your FreeID application has been successfully processed!</p>
+                
+                @if (applicationId()) {
+                  <div class="application-id-container">
+                    <p>Your application ID is:</p>
+                    <div class="id-display">
+                      <code>{{ applicationId() }}</code>
+                      <button 
+                        mat-icon-button 
+                        matTooltip="Copy application ID" 
+                        (click)="copyApplicationId()"
+                        class="copy-button">
+                        <mat-icon>content_copy</mat-icon>
+                      </button>
+                    </div>
+                    <p class="id-instructions">Please save this ID for your records. You will need it to check the status of your application.</p>
+                  </div>
+                }
+                
                 <p>A verification specialist will review your application and you will receive a notification when your identity is verified.</p>
+                
+                <!-- Add complete button to explicitly close the dialog -->
+                <div class="action-buttons">
+                  <button 
+                    mat-flat-button 
+                    color="primary" 
+                    (click)="completeVerification()" 
+                    class="complete-button">
+                    COMPLETE VERIFICATION
+                  </button>
+                </div>
               </div>
             } @else {
               <p>To verify your identity with FreeID, please complete the application form below:</p>
@@ -173,6 +202,19 @@
                       {{ submissionError()?.includes('downloaded successfully') ? 'check_circle' : 'error' }}
                     </mat-icon>
                     <p>{{ submissionError() }}</p>
+                    
+                    <!-- Add retry button for failed submissions -->
+                    @if (isRetrying()) {
+                      <button 
+                        mat-raised-button 
+                        color="primary"
+                        (click)="submitToApi()"
+                        [disabled]="verifying()"
+                        class="retry-button">
+                        <mat-icon>refresh</mat-icon>
+                        RETRY SUBMISSION
+                      </button>
+                    }
                   </div>
                 }
 
@@ -236,7 +278,8 @@
     } @else if (!submissionSuccess()) {
       <button mat-button type="button" (click)="previousStep()" [disabled]="verifying()">BACK</button>
     } @else {
-      <button mat-button type="button" (click)="close()">CLOSE</button>
+      <!-- Change to use completeVerification instead of close -->
+      <button mat-button type="button" (click)="completeVerification()">CLOSE</button>
     }
   }
 </mat-dialog-actions>

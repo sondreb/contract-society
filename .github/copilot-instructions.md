@@ -5,3 +5,5 @@ Make sure to use new flow syntax of latest Angular, which is @if instead of *ngI
 The application uses Angular Material, so make sure to use Angular Material components when possible.
 
 Make sure to put most styles in the global styles.scss file, and only use component styles for component-specific styles.
+
+Always use "fetch" for http request instead of HttpClient.

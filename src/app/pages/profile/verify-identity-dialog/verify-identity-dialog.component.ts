@@ -12,10 +12,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core'; 
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { Identity, VerificationService } from '../../../models/identity.model';
-import { MatIconModule } from '@angular/material/icon';
 
 interface DialogData {
   identity: Identity;
@@ -51,7 +51,7 @@ interface FreeIdApplication {
     MatDatepickerModule,
     MatNativeDateModule,
     MatCheckboxModule,
-    HttpClientModule
+    MatSnackBarModule
   ],
   providers: [
     MatDatepickerModule,
@@ -64,7 +64,7 @@ export class VerifyIdentityDialogComponent {
   private fb = inject(FormBuilder);
   private dialogRef = inject(MatDialogRef<VerifyIdentityDialogComponent>);
   private data: DialogData = inject(MAT_DIALOG_DATA);
-  private http = inject(HttpClient);
+  private snackBar = inject(MatSnackBar);
   
   identity = this.data.identity;
   verificationServices = this.data.verificationServices;
@@ -88,6 +88,8 @@ export class VerifyIdentityDialogComponent {
   photoPreviewUrl = signal('');
   submissionError = signal<string | null>(null);
   submissionSuccess = signal(false);
+  applicationId = signal<string>(''); // Add signal to store the application ID
+  isRetrying = signal(false); // Add signal to track if we're retrying a failed submission
 
   close(): void {
     this.dialogRef.close();
@@ -199,7 +201,7 @@ export class VerifyIdentityDialogComponent {
     }
   }
 
-  submitToApi(): void {
+  async submitToApi(): Promise<void> {
     if (this.freeIdForm.invalid) {
       this.freeIdForm.markAllAsTouched();
       return;
@@ -207,6 +209,7 @@ export class VerifyIdentityDialogComponent {
 
     this.verifying.set(true);
     this.submissionError.set(null);
+    this.isRetrying.set(false); // Reset retry flag
 
     const formValue = this.freeIdForm.value;
     const applicationData: FreeIdApplication = {
@@ -220,25 +223,73 @@ export class VerifyIdentityDialogComponent {
       covenantAccepted: formValue.covenantAccepted
     };
 
-    // API endpoint would be replaced with actual endpoint in production
-    this.http.post('https://api.freeid.network/applications', applicationData)
-      .subscribe({
-        next: (response) => {
-          this.submissionSuccess.set(true);
-          // After successful submission, close after delay
-          setTimeout(() => {
-            this.dialogRef.close({
-              identityId: this.identity.id,
-              serviceId: this.verificationForm.get('serviceId')?.value,
-              applicationSubmitted: true
-            });
-          }, 3000);
+    try {
+      debugger;
+      // Use native fetch API instead of HttpClient
+      const response = await fetch('https://freeid.azurewebsites.net/api/persist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
         },
-        error: (error) => {
-          console.error('Error submitting application:', error);
-          this.submissionError.set('Failed to submit application. Please try again or save locally.');
-          this.verifying.set(false);
-        }
+        body: JSON.stringify(applicationData)
+      });
+
+      debugger;
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      // Store the application ID from the response
+      if (data && data.id) {
+        this.applicationId.set(data.id);
+      }
+      
+      this.submissionSuccess.set(true);
+      // Remove automatic dialog closing
+    } catch (error) {
+      console.error('Error submitting application:', error);
+      this.submissionError.set('Failed to submit application. Please try again or save locally.');
+      this.isRetrying.set(true); // Enable retry mode
+    } finally {
+      this.verifying.set(false);
+    }
+  }
+  
+  // Method to complete the verification process and close the dialog
+  completeVerification(): void {
+    this.dialogRef.close({
+      identityId: this.identity.id,
+      serviceId: this.verificationForm.get('serviceId')?.value,
+      applicationSubmitted: this.submissionSuccess(),
+      applicationId: this.applicationId()
+    });
+  }
+  
+  // Add method to copy application ID to clipboard
+  copyApplicationId(): void {
+    if (!this.applicationId()) return;
+    
+    navigator.clipboard.writeText(this.applicationId())
+      .then(() => {
+        // Show a toast notification instead of updating submissionError
+        this.snackBar.open('Application ID copied to clipboard!', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          panelClass: ['success-snackbar']
+        });
+      })
+      .catch(err => {
+        console.error('Failed to copy application ID:', err);
+        this.snackBar.open('Failed to copy application ID. Please try again.', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'bottom',
+          panelClass: ['error-snackbar']
+        });
       });
   }
 }

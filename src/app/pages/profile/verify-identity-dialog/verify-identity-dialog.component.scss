@@ -129,4 +129,104 @@ mat-dialog-content {
 
 .success-message {
   background-color: rgba(76, 175, 80, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  
+  mat-icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    margin-bottom: 16px;
+  }
+  
+  p {
+    margin-bottom: 16px;
+  }
+  
+  .action-buttons {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    
+    .complete-button {
+      min-width: 200px;
+    }
+  }
+}
+
+.error-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+  margin-top: 16px;
+  border-radius: 4px;
+  background-color: rgba(244, 67, 54, 0.1);
+  
+  mat-icon {
+    margin-bottom: 8px;
+  }
+  
+  p {
+    margin: 0 0 12px 0;
+    text-align: center;
+  }
+  
+  .retry-button {
+    margin-top: 12px;
+  }
+}
+
+.application-id-container {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-radius: 8px;
+  
+  .id-display {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    padding: 8px 12px;
+    background-color: white;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    
+    code {
+      flex-grow: 1;
+      font-size: 1rem;
+      font-family: monospace;
+      overflow-wrap: break-word;
+      word-break: break-all;
+      font-weight: 500;
+      padding-right: 8px; // Add some spacing between the text and button
+    }
+    
+    .copy-button {
+      color: #555;
+      width: 32px; // Set explicit width
+      height: 32px; // Set explicit height
+      line-height: 32px; // Align icon vertically
+      
+      mat-icon {
+        font-size: 18px; // Make the icon smaller
+        height: 18px;
+        width: 18px;
+        line-height: 18px;
+      }
+      
+      &:hover {
+        color: #3f51b5;
+      }
+    }
+  }
+  
+  .id-instructions {
+    font-size: 0.9rem;
+    margin-top: 8px;
+    color: #666;
+  }
 }
