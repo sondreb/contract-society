@@ -1,0 +1,210 @@
+<div class="society-detail-container">
+  @if (loading()) {
+    <div class="loading-container">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      <p>Loading society details...</p>
+    </div>
+  } @else if (error()) {
+    <div class="error-container">
+      <mat-icon color="warn">error</mat-icon>
+      <p>{{ error() }}</p>
+      <button mat-raised-button color="primary" (click)="returnToSocieties()">
+        Return to Societies
+      </button>
+    </div>
+  } @else if (society()) {
+    <div class="society-header">
+      <button mat-icon-button (click)="returnToSocieties()" class="back-button">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1>{{ society()?.name }}</h1>
+    </div>
+
+    <div class="society-content">
+      <div class="society-image-container">
+        <img [src]="society()?.thumbnail" [alt]="society()?.name" class="society-image">
+      </div>
+
+      <mat-card class="society-info-card">
+        <mat-card-content>
+          <p class="society-description">{{ society()?.description }}</p>
+          
+          <mat-divider class="divider"></mat-divider>
+          
+          <div class="society-details">
+            <div class="detail-item">
+              <mat-icon>people</mat-icon>
+              <div class="detail-content">
+                <span class="detail-label">Members</span>
+                <span class="detail-value">{{ society()?.memberCount }}</span>
+              </div>
+            </div>
+            
+            <div class="detail-item">
+              <mat-icon>description</mat-icon>
+              <div class="detail-content">
+                <span class="detail-label">Contracts</span>
+                <span class="detail-value">{{ society()?.contractCount }}</span>
+              </div>
+            </div>
+            
+            @if (society()?.location) {
+              <div class="detail-item">
+                <mat-icon>location_on</mat-icon>
+                <div class="detail-content">
+                  <span class="detail-label">Location</span>
+                  <span class="detail-value">{{ society()?.location }}</span>
+                </div>
+              </div>
+            }
+            
+            @if (society()?.founded) {
+              <div class="detail-item">
+                <mat-icon>event</mat-icon>
+                <div class="detail-content">
+                  <span class="detail-label">Founded</span>
+                  <span class="detail-value">{{ formatDate(society()?.founded) }}</span>
+                </div>
+              </div>
+            }
+            
+            @if (society()?.website) {
+              <div class="detail-item">
+                <mat-icon>language</mat-icon>
+                <div class="detail-content">
+                  <span class="detail-label">Website</span>
+                  <a [href]="society()?.website" target="_blank" class="detail-value website-link">
+                    {{ society()?.website }}
+                  </a>
+                </div>
+              </div>
+            }
+          </div>
+        </mat-card-content>
+        
+        <mat-card-actions>
+          <button mat-raised-button color="primary" (click)="startJoining()" [disabled]="joiningActive()">
+            JOIN SOCIETY
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+
+    <!-- Joining Process Overlay -->
+    @if (joiningActive()) {
+      <div class="joining-overlay">
+        <div class="joining-dialog">
+          <div class="dialog-header">
+            <h2>Join {{ society()?.name }}</h2>
+            <button mat-icon-button (click)="cancelJoining()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+
+          @if (joinSuccess()) {
+            <div class="success-container">
+              <mat-icon color="primary" class="success-icon">check_circle</mat-icon>
+              <h3>Congratulations!</h3>
+              <p>You have successfully joined {{ society()?.name }}.</p>
+              <button mat-raised-button color="primary" (click)="cancelJoining()">CONTINUE</button>
+            </div>
+          } @else {
+            <mat-horizontal-stepper [linear]="true" [selectedIndex]="currentStep()">
+              <!-- Step 1: Choose Verification Method -->
+              <mat-step label="Choose Verification Method">
+                <div class="step-content">
+                  <p>To join this society, you need to verify your identity. Please choose a verification method:</p>
+                  
+                  <div class="verification-options">
+                    @for (option of verificationOptions(); track option.id) {
+                      <div 
+                        class="verification-option" 
+                        [class.selected]="selectedVerificationMethod() === option.id"
+                        (click)="selectVerificationMethod(option.id)"
+                      >
+                        <mat-icon>{{ option.icon }}</mat-icon>
+                        <div class="option-content">
+                          <h3>{{ option.name }}</h3>
+                          <p>{{ option.description }}</p>
+                        </div>
+                        <div class="selection-indicator">
+                          @if (selectedVerificationMethod() === option.id) {
+                            <mat-icon color="primary">check_circle</mat-icon>
+                          } @else {
+                            <div class="unselected-circle"></div>
+                          }
+                        </div>
+                      </div>
+                    }
+                  </div>
+                  
+                  <div class="step-actions">
+                    <button mat-button (click)="cancelJoining()">CANCEL</button>
+                    <button 
+                      mat-raised-button 
+                      color="primary" 
+                      [disabled]="!canProceedToVerification()"
+                      (click)="proceedToVerification()"
+                    >
+                      CONTINUE
+                    </button>
+                  </div>
+                </div>
+              </mat-step>
+              
+              <!-- Step 2: Complete Verification -->
+              <mat-step label="Verify Identity">
+                <div class="step-content">
+                  <h3>Verify Your Identity</h3>
+                  
+                  @if (selectedVerificationMethod() === 'mtl-id') {
+                    <div class="verification-instructions">
+                      <p>You've selected MTL ID verification. Please follow these steps:</p>
+                      <ol>
+                        <li>Open your MTL ID app</li>
+                        <li>Scan the QR code below</li>
+                        <li>Approve the verification request</li>
+                      </ol>
+                      
+                      <div class="qr-code-container">
+                        <img src="assets/mock-qr-code.png" alt="Verification QR Code" class="qr-code">
+                      </div>
+                    </div>
+                  } @else if (selectedVerificationMethod() === 'free-id') {
+                    <div class="verification-instructions">
+                      <p>You've selected FreeID verification. Please follow these steps:</p>
+                      <ol>
+                        <li>Open your FreeID wallet</li>
+                        <li>Select "Verify Identity"</li>
+                        <li>Enter this code: <strong>FR-1284-9753</strong></li>
+                        <li>Submit your verification</li>
+                      </ol>
+                      
+                      <div class="verification-code">FR-1284-9753</div>
+                    </div>
+                  }
+                  
+                  <div class="step-actions">
+                    <button mat-button (click)="currentStep.set(0)" [disabled]="processingVerification()">BACK</button>
+                    <button 
+                      mat-raised-button 
+                      color="primary" 
+                      (click)="completeVerification()"
+                      [disabled]="processingVerification()"
+                    >
+                      @if (processingVerification()) {
+                        <span>PROCESSING...</span>
+                      } @else {
+                        <span>COMPLETE VERIFICATION</span>
+                      }
+                    </button>
+                  </div>
+                </div>
+              </mat-step>
+            </mat-horizontal-stepper>
+          }
+        </div>
+      </div>
+    }
+  }
+</div>

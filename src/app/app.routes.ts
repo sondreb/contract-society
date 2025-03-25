@@ -28,6 +28,11 @@ export const routes: Routes = [
       import('./pages/societies/societies.component').then(m => m.SocietiesComponent)
   },
   {
+    path: 'societies/:id',
+    loadComponent: () => 
+      import('./pages/society-detail/society-detail.component').then(m => m.SocietyDetailComponent)
+  },
+  {
     path: 'scan',
     loadComponent: () => 
       import('./pages/scan/scan.component').then(m => m.ScanComponent)

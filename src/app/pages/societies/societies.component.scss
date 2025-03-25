@@ -1,0 +1,93 @@
+.societies-container {
+  padding: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header-section {
+  text-align: center;
+  margin-bottom: 24px;
+  
+  h1 {
+    margin-bottom: 8px;
+    font-size: 2rem;
+  }
+  
+  .subtitle {
+    color: rgba(0, 0, 0, 0.6);
+  }
+}
+
+.societies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.society-card {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  height: 100%;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.society-thumbnail {
+  height: 160px;
+  object-fit: cover;
+}
+
+.society-name {
+  font-size: 1.4rem;
+  margin-bottom: 8px;
+  margin-top: 8px;
+}
+
+.society-description {
+  margin-bottom: 16px;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.society-stats {
+  display: flex;
+  gap: 16px;
+  margin-top: auto;
+  
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 0.9rem;
+    
+    mat-icon {
+      font-size: 18px;
+      height: 18px;
+      width: 18px;
+    }
+  }
+}
+
+mat-card-content {
+  flex-grow: 1;
+}
+
+:host-context(.dark-theme) {
+  .subtitle {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .society-description {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .society-stats .stat {
+    color: rgba(255, 255, 255, 0.7);
+  }
+}

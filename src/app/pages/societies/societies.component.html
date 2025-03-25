@@ -1,0 +1,29 @@
+<div class="societies-container">
+  <div class="header-section">
+    <h1>Societies</h1>
+    <p class="subtitle">Join or explore self-governing communities</p>
+  </div>
+
+  <div class="societies-grid">
+    @for (society of societies(); track society.id) {
+      <mat-card class="society-card" matRipple (click)="viewSociety(society.id)">
+        <img mat-card-image [src]="society.thumbnail" [alt]="society.name" class="society-thumbnail">
+        <mat-card-content>
+          <h2 class="society-name">{{ society.name }}</h2>
+          <p class="society-description">{{ society.shortDescription }}</p>
+          <div class="society-stats">
+            <span class="stat">
+              <mat-icon>people</mat-icon> {{ society.memberCount }}
+            </span>
+            <span class="stat">
+              <mat-icon>description</mat-icon> {{ society.contractCount }}
+            </span>
+          </div>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button color="primary">VIEW DETAILS</button>
+        </mat-card-actions>
+      </mat-card>
+    }
+  </div>
+</div>
