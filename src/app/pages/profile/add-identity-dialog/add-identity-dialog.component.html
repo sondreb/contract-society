@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>Add New Identity</h2>
+
+<form [formGroup]="identityForm" (ngSubmit)="submit()">
+  <mat-dialog-content>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Identity Type</mat-label>
+      <mat-select formControlName="type">
+        @for (type of identityTypes; track type.value) {
+          <mat-option [value]="type.value">{{ type.label }}</mat-option>
+        }
+      </mat-select>
+      <mat-error>Please select an identity type</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Identity Value</mat-label>
+      <input matInput formControlName="value" placeholder="Enter the identity value">
+      <mat-error>Please enter a valid identity value</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Label (Optional)</mat-label>
+      <input matInput formControlName="label" placeholder="Enter a label for this identity">
+    </mat-form-field>
+  </mat-dialog-content>
+  
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="close()">CANCEL</button>
+    <button mat-flat-button color="primary" type="submit" [disabled]="identityForm.invalid">ADD</button>
+  </mat-dialog-actions>
+</form>

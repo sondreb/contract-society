@@ -1,0 +1,237 @@
+<div class="profile-container">
+  <h1>User Profile</h1>
+
+  @if (isLoading()) {
+    <div class="loading-overlay">
+      <mat-spinner diameter="50"></mat-spinner>
+    </div>
+  }
+
+  <div class="profile-content">
+    <mat-card class="profile-section">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>person</mat-icon>
+        <mat-card-title>Profile Information</mat-card-title>
+        <mat-card-subtitle>Manage your personal information</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="profile-info">
+          <div class="avatar-section">
+            <div class="avatar-container">
+              <img src="assets/default-avatar.png" alt="Profile avatar" class="profile-avatar">
+              <button mat-mini-fab color="primary" class="change-avatar-button">
+                <mat-icon>photo_camera</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <div class="info-section">
+            <h3>John Doe</h3>
+            <p class="user-info"><mat-icon>email</mat-icon> john.doe&#64;example.com</p>
+            <p class="user-info"><mat-icon>event</mat-icon> Member since May 2023</p>
+          </div>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button color="primary">EDIT PROFILE</button>
+      </mat-card-actions>
+    </mat-card>
+
+    <mat-card class="identities-section">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>verified_user</mat-icon>
+        <mat-card-title>Digital Identities</mat-card-title>
+        <mat-card-subtitle>Manage your digital identities and verifications</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-tab-group [selectedIndex]="selectedTab()" (selectedIndexChange)="selectedTab.set($event)">
+          <mat-tab label="All Identities">
+            <div class="identities-list">
+              @if (identities().length === 0) {
+                <div class="empty-state">
+                  <mat-icon>fingerprint</mat-icon>
+                  <p>You have no identities yet. Add your first identity to get started.</p>
+                </div>
+              } @else {
+                @for (identity of identities(); track identity.id) {
+                  <div class="identity-item" [class.verified]="identity.isVerified">
+                    <div class="identity-header">
+                      <mat-icon [color]="identity.isVerified ? 'primary' : undefined">
+                        {{ identity.type === 'did:stellar' ? 'stars' : 
+                           identity.type === 'did:is' ? 'security' : 'key' }}
+                      </mat-icon>
+                      <div class="identity-details">
+                        <h3>{{ identity.label || 'Unnamed Identity' }}</h3>
+                        <span class="identity-type">{{ getIdentityTypeLabel(identity.type) }}</span>
+                      </div>
+                      <div class="identity-status">
+                        @if (identity.isVerified) {
+                          <mat-icon class="verified-icon" color="primary" matTooltip="Verified Identity">check_circle</mat-icon>
+                        } @else {
+                          <mat-icon class="unverified-icon" matTooltip="Unverified Identity">help</mat-icon>
+                        }
+                      </div>
+                    </div>
+                    
+                    <div class="identity-value">
+                      <code>{{ identity.value }}</code>
+                    </div>
+
+                    @if (identity.isVerified && identity.verifiedBy && identity.verifiedBy.length > 0) {
+                      <div class="verification-info">
+                        <span class="verification-label">Verified by:</span>
+                        @for (serviceId of identity.verifiedBy; track serviceId) {
+                          @if (getVerificationServiceById(serviceId); as service) {
+                            <span class="verification-service" [matTooltip]="service.description">
+                              <mat-icon>{{ service.icon }}</mat-icon>
+                              {{ service.name }}
+                            </span>
+                          }
+                        }
+                        <span class="verification-date">
+                          Last verified: {{ formatDate(identity.lastVerified) }}
+                        </span>
+                      </div>
+                    }
+
+                    <div class="identity-actions">
+                      @if (!identity.isVerified) {
+                        <button 
+                          mat-stroked-button 
+                          color="primary"
+                          (click)="openVerifyIdentityDialog(identity)">
+                          VERIFY
+                        </button>
+                      }
+                      <button 
+                        mat-button 
+                        color="warn"
+                        (click)="removeIdentity(identity)">
+                        REMOVE
+                      </button>
+                    </div>
+                  </div>
+                }
+              }
+            </div>
+          </mat-tab>
+          
+          <mat-tab label="Verified Identities">
+            <div class="identities-list">
+              @if (verifiedIdentities().length === 0) {
+                <div class="empty-state">
+                  <mat-icon>verified</mat-icon>
+                  <p>You have no verified identities. Verify an identity to see it here.</p>
+                </div>
+              } @else {
+                @for (identity of verifiedIdentities(); track identity.id) {
+                  <div class="identity-item verified">
+                    <div class="identity-header">
+                      <mat-icon color="primary">
+                        {{ identity.type === 'did:stellar' ? 'stars' : 
+                           identity.type === 'did:is' ? 'security' : 'key' }}
+                      </mat-icon>
+                      <div class="identity-details">
+                        <h3>{{ identity.label || 'Unnamed Identity' }}</h3>
+                        <span class="identity-type">{{ getIdentityTypeLabel(identity.type) }}</span>
+                      </div>
+                      <div class="identity-status">
+                        <mat-icon class="verified-icon" color="primary" matTooltip="Verified Identity">check_circle</mat-icon>
+                      </div>
+                    </div>
+                    
+                    <div class="identity-value">
+                      <code>{{ identity.value }}</code>
+                    </div>
+
+                    @if (identity.verifiedBy && identity.verifiedBy.length > 0) {
+                      <div class="verification-info">
+                        <span class="verification-label">Verified by:</span>
+                        @for (serviceId of identity.verifiedBy; track serviceId) {
+                          @if (getVerificationServiceById(serviceId); as service) {
+                            <span class="verification-service" [matTooltip]="service.description">
+                              <mat-icon>{{ service.icon }}</mat-icon>
+                              {{ service.name }}
+                            </span>
+                          }
+                        }
+                        <span class="verification-date">
+                          Last verified: {{ formatDate(identity.lastVerified) }}
+                        </span>
+                      </div>
+                    }
+
+                    <div class="identity-actions">
+                      <button 
+                        mat-button 
+                        color="warn"
+                        (click)="removeIdentity(identity)">
+                        REMOVE
+                      </button>
+                    </div>
+                  </div>
+                }
+              }
+            </div>
+          </mat-tab>
+
+          <mat-tab label="Unverified Identities">
+            <div class="identities-list">
+              @if (unverifiedIdentities().length === 0) {
+                <div class="empty-state">
+                  <mat-icon>gpp_maybe</mat-icon>
+                  <p>You have no unverified identities. All your identities are verified!</p>
+                </div>
+              } @else {
+                @for (identity of unverifiedIdentities(); track identity.id) {
+                  <div class="identity-item">
+                    <div class="identity-header">
+                      <mat-icon>
+                        {{ identity.type === 'did:stellar' ? 'stars' : 
+                           identity.type === 'did:is' ? 'security' : 'key' }}
+                      </mat-icon>
+                      <div class="identity-details">
+                        <h3>{{ identity.label || 'Unnamed Identity' }}</h3>
+                        <span class="identity-type">{{ getIdentityTypeLabel(identity.type) }}</span>
+                      </div>
+                      <div class="identity-status">
+                        <mat-icon class="unverified-icon" matTooltip="Unverified Identity">help</mat-icon>
+                      </div>
+                    </div>
+                    
+                    <div class="identity-value">
+                      <code>{{ identity.value }}</code>
+                    </div>
+
+                    <div class="identity-actions">
+                      <button 
+                        mat-stroked-button 
+                        color="primary"
+                        (click)="openVerifyIdentityDialog(identity)">
+                        VERIFY
+                      </button>
+                      <button 
+                        mat-button 
+                        color="warn"
+                        (click)="removeIdentity(identity)">
+                        REMOVE
+                      </button>
+                    </div>
+                  </div>
+                }
+              }
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </mat-card-content>
+      <mat-card-actions>
+        <button 
+          mat-raised-button 
+          color="primary"
+          (click)="openAddIdentityDialog()">
+          ADD IDENTITY
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

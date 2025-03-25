@@ -382,7 +382,154 @@ mat-form-field {
   font-size: 3rem;
 }
 
+/* Fix for selection indicators - ensures consistent sizing and positioning */
+.selection-indicator {
+  margin-left: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px; /* Increased to 32px to ensure plenty of space */
+  height: 32px; /* Increased to 32px to ensure plenty of space */
+  position: relative; /* Added to create a positioning context */
+}
 
-.centered-card-actions {
-  justify-content: center !important;
+.selection-indicator .unselected-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+.selection-indicator mat-icon {
+  font-size: 24px; /* Standardized size */
+  position: absolute; /* Position absolutely within container */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Center the icon properly */
+  width: auto; /* Remove fixed width to prevent distortion */
+  height: auto; /* Remove fixed height to prevent distortion */
+  line-height: 1; /* Reset line height */
+  display: block;
+}
+
+.dark-theme .selection-indicator .unselected-circle {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Fix for selection indicators - ensures consistent sizing and positioning */
+.selection-indicator {
+  margin-left: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; /* Increased from 24px to prevent clipping */
+  height: 28px; /* Increased from 24px to prevent clipping */
+}
+
+.selection-indicator .unselected-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+.selection-indicator mat-icon {
+  width: 28px; /* Increased from 24px to prevent clipping */
+  height: 28px; /* Increased from 24px to prevent clipping */
+  font-size: 28px; /* Increased from 24px to ensure proper size */
+  line-height: 28px; /* Added to ensure proper vertical alignment */
+  display: block; /* Added to ensure proper box sizing */
+}
+
+.dark-theme .selection-indicator .unselected-circle {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Identity Management Styles */
+.profile-container {
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.profile-container h1 {
+  margin-bottom: 24px;
+}
+
+.profile-section, .identities-section {
+  margin-bottom: 24px;
+}
+
+.mat-mdc-card {
+  margin-bottom: 20px;
+}
+
+/* Utility classes for dialogs */
+.full-width {
+  width: 100%;
+}
+
+/* Dark theme adjustments for identity components */
+.dark-theme {
+  .identity-item {
+    background-color: #333;
+    border-left-color: #555;
+    
+    &.verified {
+      border-left-color: #4caf50;
+    }
+  }
+  
+  .identity-value, .verification-service, .identity-to-verify {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .identity-type, .verification-label, .verification-date {
+    color: rgba(255, 255, 255, 0.6);
+  }
+  
+  .service-option {
+    border-color: rgba(255, 255, 255, 0.1);
+    
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+    
+    &.selected {
+      background-color: rgba(63, 81, 181, 0.15);
+    }
+  }
+  
+  .selection-indicator .unselected-circle {
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+  
+  .service-details p, .empty-state p, .no-services-message {
+    color: rgba(255, 255, 255, 0.6);
+  }
+  
+  .verification-code {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Responsive adjustments for identity components */
+@media (max-width: 768px) {
+  .identity-header {
+    flex-wrap: wrap;
+  }
+  
+  .identity-status {
+    margin-left: auto;
+  }
+  
+  .verification-info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .verification-date {
+    margin-left: 0;
+    margin-top: 8px;
+  }
 }

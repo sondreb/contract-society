@@ -1,0 +1,106 @@
+<h2 mat-dialog-title>Verify Identity</h2>
+
+<mat-dialog-content>
+  @if (verificationStep() === 1) {
+    <div class="verification-step">
+      <p>You're verifying:</p>
+      <div class="identity-to-verify">
+        <code>{{ identity.value }}</code>
+      </div>
+
+      <h3>Choose a verification service:</h3>
+      
+      @if (verificationServices.length === 0) {
+        <p class="no-services-message">No compatible verification services available for this identity type.</p>
+      } @else {
+        <div class="verification-services">
+          @for (service of verificationServices; track service.id) {
+            <div 
+              class="service-option" 
+              [class.selected]="verificationForm.get('serviceId')?.value === service.id"
+              (click)="selectService(service.id)">
+              <mat-icon>{{ service.icon }}</mat-icon>
+              <div class="service-details">
+                <h4>{{ service.name }}</h4>
+                <p>{{ service.description }}</p>
+              </div>
+              <div class="selection-indicator">
+                @if (verificationForm.get('serviceId')?.value === service.id) {
+                  <mat-icon color="primary">check_circle</mat-icon>
+                } @else {
+                  <div class="unselected-circle"></div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  } @else if (verificationStep() === 2) {
+    <div class="verification-step">
+      @if (verificationForm.get('serviceId')?.value; as serviceId) {
+        @if (serviceId === 'mtl-id') {
+          <div class="verification-instructions">
+            <h3>Verification with MTL ID</h3>
+            <p>Please follow these steps to verify your identity:</p>
+            <ol>
+              <li>Open your MTL ID app on your device</li>
+              <li>Scan the QR code below</li>
+              <li>Approve the verification request in the app</li>
+              <li>Wait for the verification to complete</li>
+            </ol>
+            
+            @if (qrCodeUrl()) {
+              <div class="qr-code-container">
+                <img [src]="qrCodeUrl()" alt="Verification QR Code" class="qr-code">
+              </div>
+            }
+          </div>
+        } @else if (serviceId === 'free-id') {
+          <div class="verification-instructions">
+            <h3>Verification with FreeID</h3>
+            <p>Please follow these steps to verify your identity:</p>
+            <ol>
+              <li>Open your FreeID wallet</li>
+              <li>Navigate to "Verify Identity"</li>
+              <li>Enter the following code: <strong>FR-1284-9753</strong></li>
+              <li>Submit your verification</li>
+            </ol>
+            
+            <div class="verification-code">FR-1284-9753</div>
+          </div>
+        }
+      }
+    </div>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  @if (verificationStep() === 1) {
+    <button mat-button type="button" (click)="close()">CANCEL</button>
+    <button 
+      mat-flat-button 
+      color="primary" 
+      [disabled]="!verificationForm.get('serviceId')?.value"
+      (click)="nextStep()">
+      CONTINUE
+    </button>
+  } @else if (verificationStep() === 2) {
+    <button mat-button type="button" (click)="previousStep()" [disabled]="verifying()">BACK</button>
+    <button 
+      mat-flat-button 
+      color="primary"
+      (click)="verify()"
+      [disabled]="verifying()">
+      @if (verifying()) {
+        <span>VERIFYING...</span>
+      } @else {
+        <span>COMPLETE VERIFICATION</span>
+      }
+    </button>
+  }
+</mat-dialog-actions>
+
+@if (verifying()) {
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+}

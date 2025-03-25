@@ -204,15 +204,9 @@
   }
 }
 
+/* Remove custom styles for selection-indicator as they're now in global styles */
 .selection-indicator {
   margin-left: 16px;
-  
-  .unselected-circle {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    border: 2px solid rgba(0, 0, 0, 0.2);
-  }
 }
 
 .step-actions {
