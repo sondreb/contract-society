@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1742897663903,
+  "timestamp": 1742898243505,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -12,12 +12,12 @@
       },
       "urls": [
         "/chunk-244ZNKJ2.js",
-        "/chunk-2TKBHEOA.js",
         "/chunk-3O33QM2X.js",
         "/chunk-46HYNWYM.js",
         "/chunk-5LRGGRVL.js",
+        "/chunk-7LQQNKJY.js",
+        "/chunk-ALSR7MKH.js",
         "/chunk-DCI7YDKR.js",
-        "/chunk-EUTVB446.js",
         "/chunk-FYUZ63JS.js",
         "/chunk-FZN6V634.js",
         "/chunk-GRG53URS.js",
@@ -31,10 +31,10 @@
         "/chunk-SGYCFQGT.js",
         "/chunk-TI24KAY4.js",
         "/index.html",
-        "/main-KCNQZW33.js",
+        "/main-CUZWN4QK.js",
         "/manifest.webmanifest",
         "/polyfills-FFHMD2TL.js",
-        "/styles-O6PL3OFH.css"
+        "/styles-PEN5BKZR.css"
       ],
       "patterns": []
     },
@@ -70,12 +70,12 @@
   "dataGroups": [],
   "hashTable": {
     "/chunk-244ZNKJ2.js": "8d0a654f519926a899d88dfd3fae26753dc63f1e",
-    "/chunk-2TKBHEOA.js": "21ccdad407ead8409703569f4a000975e244894c",
     "/chunk-3O33QM2X.js": "0c428df0e0d6b9817e51bf237c5df7e18ed2bbd8",
     "/chunk-46HYNWYM.js": "fea8f49c364e6c2e360e7bdf42a2a6fd0436f275",
     "/chunk-5LRGGRVL.js": "52c04994103ad34165f9e05fd58d1f309c4f95bb",
+    "/chunk-7LQQNKJY.js": "f8de269d580c3055877f6b2e151037c3c7d0f8e8",
+    "/chunk-ALSR7MKH.js": "6c3d2b00c34999ff20239040327f8e56fe2bce1d",
     "/chunk-DCI7YDKR.js": "edee967c4ec0a272134d90501a3188ff1bbede5f",
-    "/chunk-EUTVB446.js": "8874dfd6b407201f893ae122e2c830dc38c909d8",
     "/chunk-FYUZ63JS.js": "3cde99360d4541b424354812cc2bc0680faf7e99",
     "/chunk-FZN6V634.js": "d9dd275a468a9ef095aa3199edc170b744f78a4e",
     "/chunk-GRG53URS.js": "3623d3f70d50090558b42eff644b04b6c1122e83",
@@ -99,17 +99,17 @@
     "/icons/icon-512x512.png": "b7f21ea19e11acdc92ef1aa5b69e47e4b86c28af",
     "/icons/icon-72x72.png": "6fa9084eb2929be0573098739156bf98183d66d6",
     "/icons/icon-96x96.png": "67cefd78bcb9f8e87e7738d0f1d313f8b262c347",
-    "/index.html": "4754322eea93324a12dcd5161a437a8033d6f31c",
+    "/index.html": "be76fd1f0914dde433e231872dbba178c9772626",
     "/logos/cryptocity.webp": "168b21e38c7dbf9cc677c3f92fc687d9ad03d373",
     "/logos/fsp.png": "029f9da946c17b4cdc24131723ba107958be0732",
     "/logos/liberland.png": "fe6861098b007aa3175922c63f8738954dc100a1",
     "/logos/liberstad.png": "4c343439718108bb1e2a4488ee1037cd13a71795",
     "/logos/montelibero.png": "267b1af3fb38bc4e79dd7d585d21ca8e11754067",
     "/logos/penadexo.png": "7f0f6056770a87545ee0f869e2fe914490b73ee6",
-    "/main-KCNQZW33.js": "0867027dcadd70a69d4dbfe3b316e33f657c393e",
+    "/main-CUZWN4QK.js": "3091dd5bc438b9f3d7fded112686a5a972b1b990",
     "/manifest.webmanifest": "983d55fffc8ad6b196bd62a45539fb1a349de60b",
     "/polyfills-FFHMD2TL.js": "f49b49a155bc7d192db62a4c15d0a612b460a667",
-    "/styles-O6PL3OFH.css": "085f7b2e619b28f181857c769d134d84fb47008c"
+    "/styles-PEN5BKZR.css": "f19948ff70c1153562e8d55dd4e47a3193c26476"
   },
   "navigationUrls": [
     {
