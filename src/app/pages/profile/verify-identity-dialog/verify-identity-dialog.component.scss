@@ -109,3 +109,24 @@ mat-dialog-content {
   margin: 16px 0;
   text-align: center;
 }
+
+.error-message, .success-message {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  margin-top: 16px;
+  border-radius: 4px;
+  background-color: rgba(244, 67, 54, 0.1);
+  
+  mat-icon {
+    margin-right: 8px;
+  }
+  
+  p {
+    margin: 0;
+  }
+}
+
+.success-message {
+  background-color: rgba(76, 175, 80, 0.1);
+}

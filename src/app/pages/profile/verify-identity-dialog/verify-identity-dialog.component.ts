@@ -182,16 +182,15 @@ export class VerifyIdentityDialogComponent {
       
       URL.revokeObjectURL(url);
       
-      this.submissionSuccess.set(true);
+      // Show a temporary success notification instead of closing the dialog
+      this.submissionError.set('JSON file downloaded successfully! You can continue your application or submit it online.');
       
-      // After download, close after delay
+      // Clear the message after a delay
       setTimeout(() => {
-        this.dialogRef.close({
-          identityId: this.identity.id,
-          serviceId: this.verificationForm.get('serviceId')?.value,
-          applicationSaved: true
-        });
-      }, 3000);
+        if (this.submissionError() === 'JSON file downloaded successfully! You can continue your application or submit it online.') {
+          this.submissionError.set(null);
+        }
+      }, 5000);
     } catch (error) {
       console.error('Error creating application file:', error);
       this.submissionError.set('Failed to generate application file. Please try again.');
