@@ -275,3 +275,32 @@ mat-dialog-content {
     }
   }
 }
+
+.submission-options {
+  margin-top: 24px;
+  
+  h4 {
+    margin-bottom: 16px;
+  }
+  
+  .submission-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-start;
+    
+    button {
+      min-width: 120px;
+    }
+    
+    @media (max-width: 480px) {
+      flex-direction: column;
+      align-items: stretch;
+      
+      button {
+        margin-bottom: 8px;
+        width: 100%;
+      }
+    }
+  }
+}
