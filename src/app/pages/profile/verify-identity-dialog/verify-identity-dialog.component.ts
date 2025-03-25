@@ -29,9 +29,9 @@ interface FreeIdApplication {
   sex: 'Male' | 'Female';
   dateOfBirth: Date;
   placeOfBirth: string;
-  photoUrl?: string;
   covenantAccepted: boolean;
   email: string; // Add email field
+  photo?: string;
 }
 
 @Component({
@@ -172,9 +172,9 @@ export class VerifyIdentityDialogComponent {
         sex: formValue.sex,
         dateOfBirth: formValue.dateOfBirth,
         placeOfBirth: formValue.placeOfBirth,
-        photoUrl: this.photoPreviewUrl(),
-        email: formValue.email, // Include email in application data
-        covenantAccepted: formValue.covenantAccepted
+        email: formValue.email,
+        covenantAccepted: formValue.covenantAccepted,
+        photo: this.photoPreviewUrl()
       };
       
       // Create a JSON blob and download it
@@ -221,7 +221,7 @@ export class VerifyIdentityDialogComponent {
       sex: formValue.sex,
       dateOfBirth: formValue.dateOfBirth,
       placeOfBirth: formValue.placeOfBirth,
-      photoUrl: this.photoPreviewUrl(),
+      photo: this.photoPreviewUrl(),
       email: formValue.email, // Include email in application data
       covenantAccepted: formValue.covenantAccepted
     };
