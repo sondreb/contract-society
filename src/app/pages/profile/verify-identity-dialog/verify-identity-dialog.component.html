@@ -82,7 +82,7 @@
                   </div>
                 }
                 
-                <p>A verification specialist will review your application and you will receive a notification when your identity is verified.</p>
+                <p>A verification specialist will review your application and you will receive an email notification at <strong>{{ freeIdForm.get('email')?.value }}</strong> when your identity has been processed.</p>
                 
                 <!-- Add complete button to explicitly close the dialog -->
                 <div class="action-buttons">
@@ -112,7 +112,26 @@
                     <mat-error *ngIf="freeIdForm.get('name')?.hasError('minlength')">
                       Name must be at least 2 characters long
                     </mat-error>
-                    </mat-form-field>
+                  </mat-form-field>
+                </div>
+                
+                <!-- Add email field -->
+                <div class="form-field">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Email Address</mat-label>
+                    <input 
+                      matInput 
+                      formControlName="email"
+                      placeholder="Enter your email address"
+                      type="email">
+                    <mat-icon matSuffix>mail</mat-icon>
+                    <mat-error *ngIf="freeIdForm.get('email')?.hasError('required')">
+                      Email address is required
+                    </mat-error>
+                    <mat-error *ngIf="freeIdForm.get('email')?.hasError('email')">
+                      Please enter a valid email address
+                    </mat-error>
+                  </mat-form-field>
                 </div>
                 
                 <div class="form-field">
@@ -125,7 +144,7 @@
                     <mat-error *ngIf="freeIdForm.get('sex')?.hasError('required')">
                       Sex is required
                     </mat-error>
-                    </mat-form-field>
+                  </mat-form-field>
                 </div>
                 
                 <div class="form-field">
@@ -154,7 +173,7 @@
                     <mat-error *ngIf="freeIdForm.get('placeOfBirth')?.hasError('required')">
                       Place of birth is required
                     </mat-error>
-                    </mat-form-field>
+                  </mat-form-field>
                 </div>
                 
                 <div class="form-field photo-upload">

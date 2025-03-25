@@ -23,7 +23,7 @@ interface DialogData {
 }
 
 interface FreeIdApplication {
-  identityId: string;
+  identityId?: string;
   identityValue: string;
   name: string;
   sex: 'Male' | 'Female';
@@ -31,6 +31,7 @@ interface FreeIdApplication {
   placeOfBirth: string;
   photoUrl?: string;
   covenantAccepted: boolean;
+  email: string; // Add email field
 }
 
 @Component({
@@ -79,6 +80,7 @@ export class VerifyIdentityDialogComponent {
     dateOfBirth: ['', Validators.required],
     placeOfBirth: ['', Validators.required],
     photo: [''],
+    email: ['', [Validators.required, Validators.email]], // Add email field with validators
     covenantAccepted: [false, Validators.requiredTrue]
   });
 
@@ -171,6 +173,7 @@ export class VerifyIdentityDialogComponent {
         dateOfBirth: formValue.dateOfBirth,
         placeOfBirth: formValue.placeOfBirth,
         photoUrl: this.photoPreviewUrl(),
+        email: formValue.email, // Include email in application data
         covenantAccepted: formValue.covenantAccepted
       };
       
@@ -213,13 +216,13 @@ export class VerifyIdentityDialogComponent {
 
     const formValue = this.freeIdForm.value;
     const applicationData: FreeIdApplication = {
-      identityId: this.identity.id,
       identityValue: this.identity.value,
       name: formValue.name,
       sex: formValue.sex,
       dateOfBirth: formValue.dateOfBirth,
       placeOfBirth: formValue.placeOfBirth,
       photoUrl: this.photoPreviewUrl(),
+      email: formValue.email, // Include email in application data
       covenantAccepted: formValue.covenantAccepted
     };
 
