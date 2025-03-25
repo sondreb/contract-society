@@ -1,0 +1,1 @@
+import{Rb as o,Sb as a,Sc as p,gc as c,rb as t}from"./chunk-RZ7N5LWR.js";var s=class n{static \u0275fac=function(e){return new(e||n)};static \u0275cmp=t({type:n,selectors:[["app-scan"]],decls:2,vars:0,template:function(e,i){e&1&&(o(0,"p"),c(1,"Scan component works!"),a())},dependencies:[p],encapsulation:2})};export{s as ScanComponent};
