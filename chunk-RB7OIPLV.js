@@ -1,0 +1,1 @@
+import{da as A}from"./chunk-W4AMBYUQ.js";var U=(()=>{class a{isErrorState(s,E){return!!(s&&s.invalid&&(s.touched||E&&E.submitted))}static \u0275fac=function(E){return new(E||a)};static \u0275prov=A({token:a,factory:a.\u0275fac,providedIn:"root"})}return a})();export{U as a};
