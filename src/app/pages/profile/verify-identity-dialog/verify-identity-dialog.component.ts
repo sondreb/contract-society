@@ -14,8 +14,12 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-
+import { bytesToHex, hexToBytes, bytesToUtf8, utf8ToBytes } from '@noble/ciphers/utils';
+import { randomBytes } from '@noble/ciphers/webcrypto';
+import { secp256k1 } from '@noble/curves/secp256k1';
+import { xchacha20poly1305 } from '@noble/ciphers/chacha';
 import { Identity, VerificationService } from '../../../models/identity.model';
+import { Hex, PrivKey } from '@noble/curves/abstract/utils';
 
 interface DialogData {
   identity: Identity;
@@ -24,7 +28,7 @@ interface DialogData {
 
 interface FreeIdApplication {
   identityId?: string;
-  identityValue: string;
+  identifier: string;
   name: string;
   sex: 'Male' | 'Female';
   dateOfBirth: Date;
@@ -94,6 +98,10 @@ export class VerifyIdentityDialogComponent {
   isRetrying = signal(false); // Add signal to track if we're retrying a failed submission
   photoError = signal<string | null>(null); // Add signal for photo error message
   maxPhotoSizeMB = 5; // Maximum photo size in MB
+
+  // Liberstad FreeID Office public key
+  // TODO: Replace with actual public key of Liberstad FreeID Office in Hex format
+  freeIdPublicKey = '032221067cf3da57c8cc4720a6ebe4a4e27dbba967885a1c070b6332389d4dc0e5';
 
   close(): void {
     this.dialogRef.close();
@@ -180,7 +188,7 @@ export class VerifyIdentityDialogComponent {
       const formValue = this.freeIdForm.value;
       const applicationData: FreeIdApplication = {
         identityId: this.identity.id,
-        identityValue: this.identity.value,
+        identifier: this.identity.value,
         name: formValue.name,
         sex: formValue.sex,
         dateOfBirth: formValue.dateOfBirth,
@@ -217,6 +225,68 @@ export class VerifyIdentityDialogComponent {
     }
   }
 
+  private async decryptWithPrivateKey(privateKey: PrivKey, encryptedData: any) {
+    const { ephemeralPublicKey, nonce, ciphertext } = encryptedData;
+  
+    // Compute shared secret using ECDH
+    const sharedSecret = secp256k1.getSharedSecret(privateKey, ephemeralPublicKey);
+  
+    // Use a key derivation step to create a 256-bit key for XChaCha20
+    const encryptionKey = sharedSecret.slice(0, 32); // First 32 bytes of the shared secret
+  
+    // Decrypt the ciphertext with XChaCha20-Poly1305
+    const cipher = xchacha20poly1305(encryptionKey, nonce);
+    const plaintext = cipher.decrypt(ciphertext);
+  
+    return new TextDecoder().decode(plaintext);
+  }
+
+  private async encryptWithPublicKey(publicKey: Hex, plaintext: string) {
+    // Generate a random ephemeral private key
+    const ephemeralPrivateKey = secp256k1.utils.randomPrivateKey();
+    
+    // Derive the ephemeral public key
+    const ephemeralPublicKey = secp256k1.getPublicKey(ephemeralPrivateKey);
+  
+    // Compute shared secret using ECDH
+    const sharedSecret = secp256k1.getSharedSecret(ephemeralPrivateKey, publicKey);
+  
+    // Use a key derivation step to create a 256-bit key for XChaCha20
+    const encryptionKey = sharedSecret.slice(0, 32); // First 32 bytes of the shared secret
+  
+    // Create a random 192-bit nonce (24 bytes)
+    const nonce = randomBytes(24);
+  
+    // Encrypt the plaintext with XChaCha20-Poly1305
+    const cipher = xchacha20poly1305(encryptionKey, nonce);
+    const ciphertext = cipher.encrypt(new TextEncoder().encode(plaintext));
+    
+    return {
+      ephemeralPublicKey: bytesToHex(ephemeralPublicKey), // Include ephemeral public key for decryption
+      nonce: bytesToHex(nonce), // Include nonce for decryption
+      ciphertext: bytesToHex(ciphertext), // Include ciphertext for decryption
+      publicKey
+    };
+  }
+
+  /**
+   * Encrypts data with the FreeID public key using AES-GCM algorithm
+   * This is a simplified example. In a real implementation, we would use proper asymmetric encryption.
+   */
+  private async encryptData(data: any): Promise<string> {
+    try {
+      // Convert the data to a JSON string
+      const jsonString = JSON.stringify(data);
+
+      const encryptedPackage = await this.encryptWithPublicKey(this.freeIdPublicKey, jsonString);
+
+      return JSON.stringify(encryptedPackage);
+    } catch (error) {
+      console.error('Encryption error:', error);
+      throw new Error('Failed to encrypt data');
+    }
+  }
+
   async submitToApi(): Promise<void> {
     if (this.freeIdForm.invalid) {
       this.freeIdForm.markAllAsTouched();
@@ -229,28 +299,28 @@ export class VerifyIdentityDialogComponent {
 
     const formValue = this.freeIdForm.value;
     const applicationData: FreeIdApplication = {
-      identityValue: this.identity.value,
+      identifier: this.identity.value,
       name: formValue.name,
       sex: formValue.sex,
       dateOfBirth: formValue.dateOfBirth,
       placeOfBirth: formValue.placeOfBirth,
-      photo: this.photoPreviewUrl(),
       email: formValue.email, // Include email in application data
-      covenantAccepted: formValue.covenantAccepted
+      covenantAccepted: formValue.covenantAccepted,
+      photo: this.photoPreviewUrl()
     };
 
     try {
-      debugger;
+      // Encrypt the application data
+      const encryptedData = await this.encryptData(applicationData);
+
       // Use native fetch API instead of HttpClient
       const response = await fetch('https://freeid.azurewebsites.net/api/persist', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(applicationData)
+        body: encryptedData
       });
-
-      debugger;
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);

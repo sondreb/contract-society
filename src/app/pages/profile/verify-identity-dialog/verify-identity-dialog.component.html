@@ -96,8 +96,13 @@
                 </div>
               </div>
             } @else {
-              <p>To verify your identity with FreeID, please complete the application form below:</p>
-
+              <p>To verify your identity with FreeID, please complete the application form below.</p>
+              <p>
+                All information you provide is encrypted and only readable by the <strong>Liberstad FreeID Office</strong> decentralized identifier:
+              </p>
+              <div class="identity-to-verify">
+                <code>{{ freeIdPublicKey }}</code>
+              </div>
               <form [formGroup]="freeIdForm" class="freeid-form">
                 <div class="form-field">
                   <mat-form-field appearance="outline">
@@ -263,8 +268,8 @@
                       color="primary"
                       [disabled]="freeIdForm.invalid || verifying()"
                       (click)="submitToApi()">
-                      <mat-icon>cloud_upload</mat-icon>
-                      Submit to FreeID
+                      <mat-icon>{{ verifying() ? 'enhanced_encryption' : 'cloud_upload' }}</mat-icon>
+                      {{ verifying() ? 'Encrypting & Submitting...' : 'Submit to FreeID' }}
                     </button>
                   </div>
                 </div>
